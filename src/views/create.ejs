@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create A User</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+
+  <body>
+    <h1>Hello EJS!</h1>
+    <div class="topnav">
+      <a href="/">Home</a>
+      <a href="/create" class="active">Create Users</a>
+    </div>
+    <div class="form">
+      <form action="/create-user" method="POST">
+        <fieldset>
+          <legend>Add new users</legend>
+
+          <div class="input-group">
+            <label for="email">Email:</label>
+            <input type="text" id="emailId" name="email" />
+          </div>
+
+          <div class="input-group">
+            <label for="name">Name:</label>
+            <input type="text" id="nameId" name="name" />
+          </div>
+
+          <div class="input-group">
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" />
+          </div>
+
+          <div class="input-group">
+            <button type="submit">Save</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+
+    <div>
+      <img src="/images/duy.jpg" alt="Duy" />
+    </div>
+  </body>
+</html>

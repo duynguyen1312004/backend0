@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+
+  <body>
+    <h1>Hello EJS!</h1>
+    <div class="topnav">
+      <a class="active" href="/">Home</a>
+      <a href="/create">Create Users</a>
+    </div>
+
+    <div class="table-container">
+      <div class="table-title">List Users</div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Email</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% listUsers.forEach((user) => { %>
+            <tr>
+              <td><%= user.id %></td>
+              <td><%= user.email %></td>
+              <td><%= user.name %></td>
+              <td><%= user.city %></td>
+              <td>
+                <a href="/update/<%= user.id %>">Edit</a> |
+
+                <form action="/delete-user/<%= user.id %>" method="POST" style="display: inline;">
+                  <button>Delete</button>
+                </form>
+
+              </td>
+            </tr>
+          <% }); %>
+      </table>
+    </div>
+
+    <div class="image-container">
+      <img src="/images/duy.jpg" alt="Duy" />
+    </div>
+  </body>
+</html>

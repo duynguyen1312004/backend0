@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Delete A User</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+
+  <body>
+    <h1>Hello EJS!</h1>
+
+    <div class="topnav">
+      <a href="/">Home</a>
+      <a href="/create">Create Users</a>
+    </div>
+    <div class="form">
+      <form action="/delete-user" method="POST">
+        <fieldset>
+          <legend>Delete user</legend>
+
+          <div class="input-group d-none">
+            <label for="userId">Id:</label>
+            <input
+              type="text"
+              id="userId"
+              name="userId"
+              value="<%= userEdit.id %>"
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="email">Email:</label>
+            <input
+              type="text"
+              id="emailId"
+              name="email"
+              value="<%= userEdit.email %>"
+            />
+          </div>
+
+          <div class="input-group">
+            <label>
+              Are you sure you want to delete this user with email <%=
+              userEdit.email %>?
+            </label>
+
+            <button type="submit">Delete</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+
+    <div>
+      <img src="/images/duy.jpg" alt="Duy" />
+    </div>
+  </body>
+</html>

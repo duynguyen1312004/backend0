@@ -1,0 +1,149 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #04aa6d;
+  color: white;
+}
+
+.form-add-new {
+  width: 500px;
+  margin: 0 auto;
+  padding-top: 100px;
+}
+.input-group {
+  padding: 10px 0;
+}
+button {
+  padding: 10px;
+  background-color: #04aa6d;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+body {
+  margin: 0;
+  padding: 40px;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  background-color: #f4f6f8;
+}
+
+/* Container */
+
+.table-container {
+  max-width: 800px;
+  margin: 0 auto;
+
+  padding: 25px;
+
+  background-color: white;
+
+  border-radius: 12px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Title */
+
+.table-container h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+
+  color: #333;
+}
+
+/* Table */
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  overflow: hidden;
+
+  border-radius: 8px;
+}
+
+/* Table header */
+
+thead {
+  background-color: #333;
+  color: white;
+}
+
+th {
+  padding: 14px 16px;
+
+  text-align: left;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Table body */
+
+td {
+  padding: 14px 16px;
+
+  color: #444;
+
+  border-bottom: 1px solid #eee;
+}
+
+/* Hover */
+
+tbody tr {
+  transition: 0.2s ease;
+}
+
+tbody tr:hover {
+  background-color: #f5f7fa;
+}
+
+/* Remove border from last row */
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Points */
+
+.points {
+  font-weight: 600;
+  color: #222;
+}
+/* image*/
+.image-container {
+  text-align: center;
+  margin-top: 20px;
+}
+.d-none {
+  display: none;
+}
