@@ -9,7 +9,7 @@ const {
 const User = require("../models/user");
 
 const getHomePage = async (req, res) => {
-  let results = [];
+  let results = await User.find({});
   console.log("check row ", results);
   return res.render("home.ejs", { listUsers: results });
 };
@@ -25,9 +25,6 @@ const postCreateUser = async (req, res) => {
   console.log("check req.body", email, name, city);
 
   //thêm data động vào database
-  // let results = await createUser(email, name, city);
-  // console.log("check results: ", results);
-
   await User.create({
     name: name,
     email: email,
