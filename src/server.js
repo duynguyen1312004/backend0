@@ -19,8 +19,17 @@ configViewEngine(app);
 //khai bao route
 app.use("/", webRoutes);
 
-//simple query
+//test connection
+const startServer = async () => {
+  try {
+    await connection();
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+    app.listen(port, () => {
+      console.log(`Server running at http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+  }
+};
+
+startServer();
