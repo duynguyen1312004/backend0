@@ -17,11 +17,13 @@ router.get("/abc", getABC);
 
 router.get("/create", getCreatePage);
 router.post("/create-user", postCreateUser);
-
+//update theo id
 router.get("/update/:id", getUpdatePage);
+//bấm nút save update
 router.post("/update-user", postUpdateUser);
-
+//xóa theo id
 router.post("/delete-user/:id", postDeleteUser);
+//bấm nút xóa
 router.post("/delete-user", postHandleRemoveUser);
 
 module.exports = router;

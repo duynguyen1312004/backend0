@@ -40,7 +40,8 @@ const getCreatePage = (req, res) => {
 
 const getUpdatePage = async (req, res) => {
   const userId = req.params.id;
-  let user = await getUserById(userId);
+  // let user = await getUserById(userId);
+  let user = await User.findById(userId);
   res.render("edit.ejs", { userEdit: user }); //x <- y
 };
 
@@ -53,8 +54,15 @@ const postUpdateUser = async (req, res) => {
   console.log("check req.body", email, name, city, userId);
 
   //thêm data động vào database
-  await updateUserById(email, city, name, userId);
-
+  // await updateUserById(email, city, name, userId);
+  await User.updateOne(
+    { _id: userId },
+    {
+      email: email,
+      name: name,
+      city: city,
+    },
+  );
   // res.send("Updated user succeed");
   res.redirect("/"); //tro ve trang chu
 };
