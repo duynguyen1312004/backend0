@@ -3,7 +3,6 @@ const path = require("path");
 const configViewEngine = require("./config/viewEngine");
 const webRoutes = require("./routes/web");
 const connection = require("./config/database");
-const mongoose = require("mongoose");
 
 require("dotenv").config();
 
@@ -20,12 +19,8 @@ configViewEngine(app);
 //khai bao route
 app.use("/", webRoutes);
 
-const kittySchema = mongoose.Schema({
-  name: String,
-});
-const Kitten = mongoose.model("Kitten", kittySchema);
-const cat = new Kitten({ name: "Duy Nguyen" });
-cat.save();
+//shape data
+
 //test connection
 const startServer = async () => {
   try {
