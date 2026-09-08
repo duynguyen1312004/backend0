@@ -5,10 +5,15 @@ const webRoutes = require("./routes/web");
 const connection = require("./config/database");
 const apiRoutes = require("./routes/api");
 
+const fileUpload = require("express-fileupload");
+
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+// Initialize the file upload middleware
+app.use(fileUpload());
 
 //config req.body:
 app.use(express.json()); //for json
