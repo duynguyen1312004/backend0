@@ -7,4 +7,23 @@ const getUsersAPI = async (req, res) => {
     data: results,
   });
 };
-module.exports = { getUsersAPI };
+
+const postCreateUserAPI = async (req, res) => {
+  let email = req.body.email;
+  let name = req.body.name;
+  let city = req.body.city;
+  console.log("check req.body", email, name, city);
+
+  //thêm data động vào database
+  let user = await User.create({
+    name: name,
+    email: email,
+    city: city,
+  });
+
+  return res.status(200).json({
+    errorCode: 0,
+    data: user,
+  });
+};
+module.exports = { getUsersAPI, postCreateUserAPI };
