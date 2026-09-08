@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const { uploadSinglefiles } = require("../services/fileService");
 
 const getUsersAPI = async (req, res) => {
   let results = await User.find({});
@@ -61,9 +62,19 @@ const deleteUserAPI = async (req, res) => {
   });
 };
 
+const postUploadSingleFileAPI = async (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ error: "Vui lòng chọn ít nhất một file!" });
+  }
+  let result = await uploadSinglefiles(req.files.image);
+  console.log(">>check result = ", result);
+  return res.send("completed upload file");
+};
+
 module.exports = {
   deleteUserAPI,
   putUpdateUserAPI,
   getUsersAPI,
   postCreateUserAPI,
+  postUploadSingleFileAPI,
 };
