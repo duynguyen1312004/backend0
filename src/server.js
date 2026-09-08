@@ -3,6 +3,7 @@ const path = require("path");
 const configViewEngine = require("./config/viewEngine");
 const webRoutes = require("./routes/web");
 const connection = require("./config/database");
+const apiRoutes = require("./routes/api");
 
 require("dotenv").config();
 
@@ -18,6 +19,7 @@ configViewEngine(app);
 
 //khai bao route
 app.use("/", webRoutes);
+app.use("/v1/api", apiRoutes);
 
 //shape data
 
