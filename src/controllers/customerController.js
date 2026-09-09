@@ -2,6 +2,7 @@ const { uploadSingleFile } = require("../services/fileService");
 const {
   createCustomerService,
   createArrayCustomerService,
+  getAllCustomersService,
 } = require("../services/customerService");
 //1 cách khác để viết API
 //{key : value}
@@ -46,5 +47,12 @@ module.exports = {
         data: customers,
       });
     }
+  },
+  getAllCustomers: async (req, res) => {
+    let result = await getAllCustomersService();
+    return res.status(200).json({
+      EC: 0,
+      data: result,
+    });
   },
 };
