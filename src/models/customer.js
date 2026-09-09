@@ -16,6 +16,6 @@ const customerSchema = mongoose.Schema(
     timestamps: true, //khi thêm cái trường này tự động nó có createdAt và updatedAt
   },
 );
-const Customer = mongoose.model("user", customerSchema); //(collection, ten schema)
+const Customer = mongoose.model("customer", customerSchema); //(collection, ten schema)
 
 module.exports = Customer;
