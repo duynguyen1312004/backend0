@@ -3,6 +3,7 @@ const {
   createCustomerService,
   createArrayCustomerService,
   getAllCustomersService,
+  putUpdateCustomersService,
 } = require("../services/customerService");
 //1 cách khác để viết API
 //{key : value}
@@ -50,6 +51,19 @@ module.exports = {
   },
   getAllCustomers: async (req, res) => {
     let result = await getAllCustomersService();
+    return res.status(200).json({
+      EC: 0,
+      data: result,
+    });
+  },
+  putUpdateCustomers: async (req, res) => {
+    let { customerId, name, email, address } = req.body;
+    const data = {
+      name,
+      email,
+      address,
+    };
+    let result = await putUpdateCustomersService(customerId, data);
     return res.status(200).json({
       EC: 0,
       data: result,

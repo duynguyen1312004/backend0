@@ -35,8 +35,27 @@ const getAllCustomersService = async () => {
     return null;
   }
 };
+const putUpdateCustomersService = async (customerId, data) => {
+  try {
+    // let result = await Customer.findByIdAndUpdate(customerId, data, {
+    //   new: true,
+    // });
+    let result = await Customer.updateOne(
+      { _id: customerId },
+      {
+        ...data, //hoặc bỏ đi {} chỉ còn data thôi là nó đúng
+      },
+    );
+    const customer = await Customer.findById(customerId);
+    return result;
+  } catch (error) {
+    console.log("error : ", error);
+    return null;
+  }
+};
 module.exports = {
   createCustomerService,
   createArrayCustomerService,
   getAllCustomersService,
+  putUpdateCustomersService,
 };
