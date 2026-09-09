@@ -4,7 +4,7 @@ const customerSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      require: true, //thuộc tính bắt buộc
+      required: true, //thuộc tính bắt buộc
     },
     address: String,
     phone: Number,

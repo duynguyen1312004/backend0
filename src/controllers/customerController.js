@@ -1,5 +1,8 @@
 const { uploadSingleFile } = require("../services/fileService");
-const { createCustomerService } = require("../services/customerService");
+const {
+  createCustomerService,
+  createArrayCustomerService,
+} = require("../services/customerService");
 //1 cách khác để viết API
 //{key : value}
 module.exports = {
@@ -29,5 +32,19 @@ module.exports = {
       EC: 0,
       data: customer,
     });
+  },
+  postCreateArrayCustomer: async (req, res) => {
+    let customers = await createArrayCustomerService(req.body.customers);
+    if (customers) {
+      return res.status(200).json({
+        EC: 0,
+        data: customers,
+      });
+    } else {
+      return res.status(200).json({
+        EC: -1,
+        data: customers,
+      });
+    }
   },
 };
