@@ -29,6 +29,7 @@ const createArrayCustomerService = async (arr) => {
 const getAllCustomersService = async () => {
   try {
     let result = await Customer.find({});
+    console.log("Customers:", result);
     return result;
   } catch (error) {
     console.log("error: ", error);
@@ -46,7 +47,17 @@ const putUpdateCustomersService = async (customerId, data) => {
         ...data, //hoặc bỏ đi {} chỉ còn data thôi là nó đúng
       },
     );
-    const customer = await Customer.findById(customerId);
+    return result;
+  } catch (error) {
+    console.log("error : ", error);
+    return null;
+  }
+};
+
+const deleteACustomerService = async (customerId) => {
+  try {
+    // let result = await Customer.deleteOne({ _id: customerId });//xóa là mất tiêu luôn không còn gì
+    let result = await Customer.deleteById(customerId); //đẩy biến deleted = true
     return result;
   } catch (error) {
     console.log("error : ", error);
@@ -58,4 +69,5 @@ module.exports = {
   createArrayCustomerService,
   getAllCustomersService,
   putUpdateCustomersService,
+  deleteACustomerService,
 };

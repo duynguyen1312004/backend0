@@ -4,6 +4,7 @@ const {
   createArrayCustomerService,
   getAllCustomersService,
   putUpdateCustomersService,
+  deleteACustomerService,
 } = require("../services/customerService");
 //1 cách khác để viết API
 //{key : value}
@@ -64,6 +65,15 @@ module.exports = {
       address,
     };
     let result = await putUpdateCustomersService(customerId, data);
+    return res.status(200).json({
+      EC: 0,
+      data: result,
+    });
+  },
+  deleteACustomer: async (req, res) => {
+    let customerId = req.body.id;
+    console.log("check customerId = ", customerId);
+    const result = await deleteACustomerService(customerId);
     return res.status(200).json({
       EC: 0,
       data: result,
