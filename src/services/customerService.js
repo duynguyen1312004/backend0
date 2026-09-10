@@ -26,9 +26,15 @@ const createArrayCustomerService = async (arr) => {
     return null;
   }
 };
-const getAllCustomersService = async () => {
+const getAllCustomersService = async (limit, page) => {
   try {
-    let result = await Customer.find({});
+    let result = null;
+    if (limit && page) {
+      let skip = (page - 1) * limit;
+      result = await Customer.find({}).skip(skip).limit(limit).exec();
+    } else {
+      result = await Customer.find({});
+    }
     return result;
   } catch (error) {
     console.log("error: ", error);
@@ -66,6 +72,8 @@ const deleteACustomerService = async (customerId) => {
 
 const deleteArrayCustomersService = async (customerIds) => {
   try {
+    // Delete multiple object, callback
+    //Pet.delete({age:10}, function (err, result) { ... });
     let result = await Customer.delete({
       _id: {
         $in: customerIds, //lấy mảng customerIds trên body
