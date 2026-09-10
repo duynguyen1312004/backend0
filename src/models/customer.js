@@ -14,7 +14,12 @@ const customerSchema = mongoose.Schema(
     description: String,
   },
   {
-    timestamps: true, //khi thêm cái trường này tự động nó có createdAt và updatedAt
+    timestamps: true, //khi thêm cái trường timestamps tự động nó có createdAt và updatedAt
+    // statics: {
+    //   findByName(name) {
+    //     return this.findByName({ name: new RegExp(name, "i") });//dùng để tạo hàm tái sử dụng, vscode có thể gợi ý
+    //   },
+    // },
   },
 );
 //override all methods
