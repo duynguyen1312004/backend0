@@ -26,12 +26,20 @@ const createArrayCustomerService = async (arr) => {
     return null;
   }
 };
-const getAllCustomersService = async (limit, page) => {
+const getAllCustomersService = async (limit, page, name) => {
   try {
     let result = null;
     if (limit && page) {
       let skip = (page - 1) * limit;
-      result = await Customer.find({}).skip(skip).limit(limit).exec();
+      if (name) {
+        //tìm chuỗi có chứa name & 'i' : không phân biệt chữ thường hoa
+        result = await Customer.find({ name: { $regex: name, $options: "i" } })
+          .skip(skip)
+          .limit(limit)
+          .exec();
+      } else {
+        result = await Customer.find({}).skip(skip).limit(limit).exec();
+      }
     } else {
       result = await Customer.find({});
     }
