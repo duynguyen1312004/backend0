@@ -7,6 +7,8 @@ const {
   deleteACustomerService,
   deleteArrayCustomersService,
 } = require("../services/customerService");
+
+const aqp = require("api-query-params");
 //1 cách khác để viết API
 //{key : value}
 module.exports = {
@@ -52,23 +54,22 @@ module.exports = {
     }
   },
   getAllCustomers: async (req, res) => {
-    let limit = Number(req.query.limit);
-    let page = Number(req.query.page);
-    let name = req.query.name;
-    let result = null;
-    if (limit && page) {
-      result = await getAllCustomersService(limit, page, name);
-      return res.status(200).json({
-        EC: 0,
-        data: result,
-      });
-    } else {
-      result = await getAllCustomersService();
-      return res.status(200).json({
-        EC: 0,
-        data: result,
-      });
-    }
+    const { limit, page, name, address, phone, email, city, age } = req.query;
+    const result = await getAllCustomersService({
+      limit: Number(limit),
+      page: Number(page),
+      name,
+      address,
+      phone,
+      email,
+      city,
+      age,
+    });
+
+    return res.status(200).json({
+      EC: 0,
+      data: result,
+    });
   },
   putUpdateCustomers: async (req, res) => {
     let { customerId, name, email, address } = req.body;

@@ -26,23 +26,64 @@ const createArrayCustomerService = async (arr) => {
     return null;
   }
 };
-const getAllCustomersService = async (limit, page, name) => {
+const getAllCustomersService = async ({
+  limit,
+  page,
+  name,
+  address,
+  phone,
+  email,
+  city,
+  age,
+}) => {
   try {
-    let result = null;
+    let filter = {};
+    if (name) {
+      //tìm chuỗi có chứa name & 'i' : không phân biệt chữ thường hoa
+      filter.name = {
+        $regex: name,
+        $options: "i",
+      };
+    }
+
+    if (phone) {
+      filter.phone = {
+        $regex: phone,
+        $options: "i",
+      };
+    }
+
+    if (address) {
+      filter.address = {
+        $regex: address,
+        $options: "i",
+      };
+    }
+    if (email) {
+      filter.email = {
+        $regex: email,
+        $options: "i",
+      };
+    }
+
+    if (city) {
+      filter.city = {
+        $regex: city,
+        $options: "i",
+      };
+    }
+
+    if (age) {
+      filter.age = Number(age);
+    }
+    //...
+    let query = Customer.find(filter);
+
     if (limit && page) {
       let skip = (page - 1) * limit;
-      if (name) {
-        //tìm chuỗi có chứa name & 'i' : không phân biệt chữ thường hoa
-        result = await Customer.find({ name: { $regex: name, $options: "i" } })
-          .skip(skip)
-          .limit(limit)
-          .exec();
-      } else {
-        result = await Customer.find({}).skip(skip).limit(limit).exec();
-      }
-    } else {
-      result = await Customer.find({});
+      query = query.skip(skip).limit(limit);
     }
+    const result = await query.exec();
     return result;
   } catch (error) {
     console.log("error: ", error);
