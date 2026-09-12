@@ -6,6 +6,7 @@ const connection = require("./config/database");
 const apiRoutes = require("./routes/api");
 
 const fileUpload = require("express-fileupload");
+const { MongoClient } = require("mongodb");
 
 require("dotenv").config();
 
@@ -31,7 +32,26 @@ app.use("/v1/api", apiRoutes);
 //test connection
 const startServer = async () => {
   try {
-    await connection();
+    //using mongoose
+    // await connection();
+
+    //using mongodb
+    // Connection URL
+    const url = process.env.DB_HOST;
+    const client = new MongoClient(url);
+
+    // Database Name
+    const dbName = process.env.DB_NAME;
+
+    await client.connect();
+    console.log("Connected successfully to server");
+
+    const db = client.db(dbName);
+    const collection = db.collection("documents");
+
+    const result = await collection.find({}).toArray();
+
+    console.log(result);
 
     app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}`);

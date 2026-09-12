@@ -19,6 +19,7 @@
     "express": "^5.2.1",
     "express-fileupload": "^1.5.2",
     "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.6.0",
     "mongoose": "^9.9.3",
     "mongoose-delete": "^1.0.7",
     "mysql2": "^3.24.2"
