@@ -47,12 +47,10 @@ const startServer = async () => {
     console.log("Connected successfully to server");
 
     const db = client.db(dbName);
-    const collection = db.collection("documents");
-
-    const result = await collection.find({}).toArray();
-
-    console.log(result);
-
+    const collection = db.collection("customers");
+    let result = await collection.findOne({ address: "Hai Phong" });
+    // collection.insertOne({ address: "Bac Lieu", email: "PhanPhuoc@gmail.com" });
+    console.log("find = ", result);
     app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}`);
     });
