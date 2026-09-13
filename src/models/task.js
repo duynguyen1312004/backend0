@@ -25,7 +25,7 @@ const taskSchema = mongoose.Schema(
     status: String,
     startDate: String,
     endDate: String,
-    userInfor: userSchema, //reperence: 1 nhân viên có thể có nhiều task
+    usersInfor: userSchema, //reperence: 1 nhân viên có thể có nhiều task
     projectInfor: projectSchema,
   },
   {
@@ -39,6 +39,6 @@ const taskSchema = mongoose.Schema(
 );
 //override all methods
 taskSchema.plugin(mongoose_delete, { overrideMethods: "all" }); //chỉ hiện danh sách có deleted = false;
-const Task = mongoose.model("customer", taskSchema); //(collection, ten schema)
+const Task = mongoose.model("task", taskSchema); //(collection, ten schema)
 
 module.exports = Task;

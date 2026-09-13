@@ -16,6 +16,7 @@ const {
   deleteACustomer,
   deleteArrayCustomers,
 } = require("../controllers/customerController");
+const { postCreateProject } = require("../controllers/projectController");
 
 //router Method('/route',handler)
 
@@ -34,19 +35,21 @@ routerAPI.put("/customers", putUpdateCustomers);
 routerAPI.delete("/customers", deleteACustomer);
 routerAPI.delete("/customers-many", deleteArrayCustomers);
 
+routerAPI.post("/projects", postCreateProject);
+
 //query string => không cần khai báo thêm route, đứng sau dấu ?
-routerAPI.get("/info", (req, res) => {
-  console.log("check query : ", req.query);
-  return res.status(200).json({
-    data: req.query,
-  });
-});
+// routerAPI.get("/info", (req, res) => {
+//   console.log("check query : ", req.query);
+//   return res.status(200).json({
+//     data: req.query,
+//   });
+// });
 //params string => cần khai báo thêm route, và truyền lên ít data
-routerAPI.get("/info/:name/:address", (req, res) => {
-  console.log("check params : ", req.params);
-  return res.status(200).json({
-    data: req.params,
-  });
-});
+// routerAPI.get("/info/:name/:address", (req, res) => {
+//   console.log("check params : ", req.params);
+//   return res.status(200).json({
+//     data: req.params,
+//   });
+// });
 
 module.exports = routerAPI;

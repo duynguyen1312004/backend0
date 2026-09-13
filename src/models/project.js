@@ -25,7 +25,7 @@ const projectSchema = mongoose.Schema(
     endDate: String,
     description: String,
     customerInfor: customerSchema, //embedded 1 : 1
-    userInfor: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], //reperence: 1 nhân viên có thể có nhiều task
+    usersInfor: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], //reperence: 1 nhân viên có thể có nhiều task
     leader: userSchema,
     tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
   },
@@ -40,6 +40,6 @@ const projectSchema = mongoose.Schema(
 );
 //override all methods
 projectSchema.plugin(mongoose_delete, { overrideMethods: "all" }); //chỉ hiện danh sách có deleted = false;
-const Project = mongoose.model("customer", projectSchema); //(collection, ten schema)
+const Project = mongoose.model("project", projectSchema); //(collection, ten schema)
 
 module.exports = Project;

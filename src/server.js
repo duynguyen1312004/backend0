@@ -33,42 +33,42 @@ app.use("/v1/api", apiRoutes);
 const startServer = async () => {
   try {
     //using mongoose
-    // await connection();
+    await connection();
 
     //using mongodb
     // Connection URL
-    const url = process.env.DB_HOST;
-    const client = new MongoClient(url);
+    // const url = process.env.DB_HOST;
+    // const client = new MongoClient(url);
 
     // Database Name
-    const dbName = process.env.DB_NAME;
+    // const dbName = process.env.DB_NAME;
 
-    await client.connect();
-    console.log("Connected successfully to server");
+    // await client.connect();
+    // console.log("Connected successfully to server");
 
-    const db = client.db(dbName);
-    const collection = db.collection("customers");
-    // let result = await collection.findOne({ address: "Hai Phong" });
-    collection.insertOne({
-      name: "Duy Nguyen",
-      address: [
-        {
-          province: "Quy Nhon",
-          country: {
-            name: "vietNam",
-            code: 100,
-          },
-        },
-        {
-          province: "Ca Mau",
-          country: {
-            name: "vietNam",
-            code: 100,
-          },
-        },
-      ],
-      email: "PhanPhuoc@gmail.com",
-    });
+    // const db = client.db(dbName);
+    // const collection = db.collection("customers");
+    // // let result = await collection.findOne({ address: "Hai Phong" });
+    // collection.insertOne({
+    //   name: "Duy Nguyen",
+    //   address: [
+    //     {
+    //       province: "Quy Nhon",
+    //       country: {
+    //         name: "vietNam",
+    //         code: 100,
+    //       },
+    //     },
+    //     {
+    //       province: "Ca Mau",
+    //       country: {
+    //         name: "vietNam",
+    //         code: 100,
+    //       },
+    //     },
+    //   ],
+    //   email: "PhanPhuoc@gmail.com",
+    // });
 
     app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}`);
