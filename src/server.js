@@ -48,9 +48,28 @@ const startServer = async () => {
 
     const db = client.db(dbName);
     const collection = db.collection("customers");
-    let result = await collection.findOne({ address: "Hai Phong" });
-    // collection.insertOne({ address: "Bac Lieu", email: "PhanPhuoc@gmail.com" });
-    console.log("find = ", result);
+    // let result = await collection.findOne({ address: "Hai Phong" });
+    collection.insertOne({
+      name: "Duy Nguyen",
+      address: [
+        {
+          province: "Quy Nhon",
+          country: {
+            name: "vietNam",
+            code: 100,
+          },
+        },
+        {
+          province: "Ca Mau",
+          country: {
+            name: "vietNam",
+            code: 100,
+          },
+        },
+      ],
+      email: "PhanPhuoc@gmail.com",
+    });
+
     app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}`);
     });
