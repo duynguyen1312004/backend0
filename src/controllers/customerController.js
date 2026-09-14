@@ -8,12 +8,37 @@ const {
   deleteArrayCustomersService,
 } = require("../services/customerService");
 
+const Joi = require("joi");
+
 const aqp = require("api-query-params");
 //1 cách khác để viết API
 //{key : value}
 module.exports = {
   postCreateCustomer: async (req, res) => {
     let { name, address, phone, email, description } = req.body;
+    const schema = Joi.object({
+      name: Joi.string().alphanum().min(3).max(30).required(),
+
+      address: Joi.string(),
+
+      phone: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+
+      email: Joi.string().email({
+        minDomainSegments: 2,
+        tlds: { allow: ["com", "net"] },
+      }),
+
+      description: Joi.string(),
+    });
+    const { error } = schema.validate(req.body, { abortEarly: false });
+    // console.log("check result = ", result);
+    if (error) {
+      //return error
+    } else {
+      return res.status(200).json({
+        message: error,
+      });
+    }
 
     let imageUrl = "";
     //image: String
