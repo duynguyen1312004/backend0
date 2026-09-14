@@ -22,7 +22,12 @@ const {
   deleteProject,
   putUpdateProject,
 } = require("../controllers/projectController");
-
+const {
+  postCreateTask,
+  getAllTasks,
+  deleteTask,
+  updateTask,
+} = require("../controllers/taskController");
 //router Method('/route',handler)
 
 routerAPI.get("/users", getUsersAPI);
@@ -45,6 +50,10 @@ routerAPI.get("/projects", getAllProject);
 routerAPI.delete("/projects", deleteProject);
 routerAPI.put("/projects", putUpdateProject);
 
+routerAPI.post("/tasks", postCreateTask);
+routerAPI.get("/tasks", getAllTasks);
+routerAPI.delete("/tasks", deleteTask);
+routerAPI.put("/tasks", updateTask);
 //query string => không cần khai báo thêm route, đứng sau dấu ?
 // routerAPI.get("/info", (req, res) => {
 //   console.log("check query : ", req.query);

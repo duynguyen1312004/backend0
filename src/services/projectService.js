@@ -1,5 +1,6 @@
 const Project = require("../models/project");
 const aqp = require("api-query-params");
+const Task = require("../models/task");
 
 const createProjectService = async (data) => {
   if (data.type === "EMPTY-PROJECT") {
@@ -59,6 +60,17 @@ const deleteProjectService = async (data) => {
 
 const putUpdateProjectService = async (idProject, data) => {
   try {
+    if (data.type === "ADD-TASK") {
+      let result = await Project.updateOne(
+        { _id: idProject },
+        {
+          $push: {
+            tasks: data.idTask, //thêm idTask vào trong array tasks
+          },
+        },
+      );
+      return result;
+    }
     let result = await Project.updateOne(
       { _id: idProject },
       {

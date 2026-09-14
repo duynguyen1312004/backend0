@@ -14,6 +14,13 @@ const userSchema = mongoose.Schema({
   email: String,
 });
 
+const projectSchema = mongoose.Schema({
+  name: String,
+  startDate: String,
+  endDate: String,
+  description: String,
+});
+
 // const userSchema = new Schema({ name: String }, { timestamps: true });
 const taskSchema = mongoose.Schema(
   {

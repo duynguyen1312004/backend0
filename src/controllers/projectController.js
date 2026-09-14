@@ -29,8 +29,16 @@ const deleteProject = async (req, res) => {
 };
 
 const putUpdateProject = async (req, res) => {
-  const { idProject, name, endDate, description } = req.body;
-  const data = { name, endDate, description };
+  const { idProject, type, idTask, name, endDate, description } = req.body;
+
+  const data = {
+    type,
+    idTask,
+    name,
+    endDate,
+    description,
+  };
+
   let result = await putUpdateProjectService(idProject, data);
   return res.status(200).json({
     EC: 0,
