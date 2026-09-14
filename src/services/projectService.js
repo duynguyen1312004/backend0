@@ -1,4 +1,5 @@
 const Project = require("../models/project");
+const aqp = require("api-query-params");
 
 const createProjectService = async (data) => {
   if (data.type === "EMPTY-PROJECT") {
@@ -6,17 +7,74 @@ const createProjectService = async (data) => {
     return result;
   }
   if (data.type === "ADD-USERS") {
-    console.log("check data = ", data);
     let myProject = await Project.findById(data.projectId).exec();
 
     for (let i = 0; i < data.usersArr.length; i++) {
       myProject.usersInfor.push(data.usersArr[i]);
     }
     let newResult = await myProject.save();
-    console.log(myProject);
     return newResult;
   }
   return null;
 };
 
-module.exports = { createProjectService };
+const getProjectService = async (data) => {
+  let filter = {};
+  let limit = Number(data.limit);
+  let page = Number(data.page);
+  let query = Project.find(filter).populate(data.populate); //lấy document liên quan từ collection khác.
+  if (limit && page) {
+    let skip = (page - 1) * limit;
+    query = query.skip(skip).limit(limit);
+  }
+  const result = await query.exec();
+  return result;
+};
+
+const deleteProjectService = async (data) => {
+  try {
+    const idProject = data.idProject;
+    const idUser = data.idUser;
+    if (data.type === "REMOVE-USER") {
+      let result = await Project.updateOne(
+        { _id: idProject },
+        {
+          $pull: {
+            usersInfor: idUser,
+          },
+        },
+      );
+      return result;
+    }
+    if (data.type === "REMOVE-PROJECT") {
+      let result = await Project.deleteById(idProject); //đẩy biến deleted = true
+      console.log("Delete result:", result);
+      return result;
+    }
+  } catch (error) {
+    console.log("error : ", error);
+    return null;
+  }
+};
+
+const putUpdateProjectService = async (idProject, data) => {
+  try {
+    let result = await Project.updateOne(
+      { _id: idProject },
+      {
+        ...data, //hoặc bỏ đi {} chỉ còn data thôi là nó đúng
+      },
+    );
+    return result;
+  } catch (error) {
+    console.log("error : ", error);
+    return null;
+  }
+};
+
+module.exports = {
+  createProjectService,
+  getProjectService,
+  deleteProjectService,
+  putUpdateProjectService,
+};

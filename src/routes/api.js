@@ -16,7 +16,12 @@ const {
   deleteACustomer,
   deleteArrayCustomers,
 } = require("../controllers/customerController");
-const { postCreateProject } = require("../controllers/projectController");
+const {
+  postCreateProject,
+  getAllProject,
+  deleteProject,
+  putUpdateProject,
+} = require("../controllers/projectController");
 
 //router Method('/route',handler)
 
@@ -36,6 +41,9 @@ routerAPI.delete("/customers", deleteACustomer);
 routerAPI.delete("/customers-many", deleteArrayCustomers);
 
 routerAPI.post("/projects", postCreateProject);
+routerAPI.get("/projects", getAllProject);
+routerAPI.delete("/projects", deleteProject);
+routerAPI.put("/projects", putUpdateProject);
 
 //query string => không cần khai báo thêm route, đứng sau dấu ?
 // routerAPI.get("/info", (req, res) => {

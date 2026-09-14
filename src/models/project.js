@@ -25,9 +25,9 @@ const projectSchema = mongoose.Schema(
     endDate: String,
     description: String,
     customerInfor: customerSchema, //embedded 1 : 1
-    usersInfor: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], //reperence: 1 nhân viên có thể có nhiều task
+    usersInfor: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }], //reperence: 1 nhân viên có thể có nhiều task
     leader: userSchema,
-    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
+    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "task" }],
   },
   {
     timestamps: true, //khi thêm cái trường timestamps tự động nó có createdAt và updatedAt
