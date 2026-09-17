@@ -1,8 +1,10 @@
 const Joi = require("joi");
+const User = require("../models/user");
 const {
   postRegisterService,
   postLoginService,
 } = require("../services/authService");
+
 const getLoginPage = (req, res) => {
   return res.render("login.ejs");
 };
@@ -56,4 +58,37 @@ const postRegister = async (req, res) => {
   res.status(200).json(result);
 };
 
-module.exports = { postLogin, getLoginPage, getRegisterPage, postRegister };
+const getProfile = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        EC: 1,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      EC: 0,
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      EC: -1,
+      message: "Internal server error",
+    });
+  }
+};
+
+module.exports = {
+  getProfile,
+  postLogin,
+  getLoginPage,
+  getRegisterPage,
+  postRegister,
+};

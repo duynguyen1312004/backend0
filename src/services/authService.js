@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const postRegisterService = async (data) => {
   try {
@@ -52,9 +53,20 @@ const postLoginService = async (data) => {
         message: "Password is incorrect",
       };
     }
+    const payload = {
+      userId: user._id,
+      email: user.email,
+    };
+
+    const access_token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
     return {
       EC: 0,
       message: "Login successfully",
+      data: {
+        access_token,
+      },
     };
   } catch (error) {
     console.log("error : ", error);

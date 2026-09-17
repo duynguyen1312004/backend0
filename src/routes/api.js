@@ -28,6 +28,16 @@ const {
   deleteTask,
   updateTask,
 } = require("../controllers/taskController");
+
+const {
+  postRegister,
+  postLogin,
+  getProfile,
+} = require("../controllers/authController");
+
+const authMiddleware = require("../middlewares/authMiddleware");
+//Middleware
+routerAPI.get("/profile", authMiddleware, getProfile);
 //router Method('/route',handler)
 
 routerAPI.get("/users", getUsersAPI);
@@ -45,15 +55,15 @@ routerAPI.put("/customers", putUpdateCustomers);
 routerAPI.delete("/customers", deleteACustomer);
 routerAPI.delete("/customers-many", deleteArrayCustomers);
 
-routerAPI.post("/projects", postCreateProject);
-routerAPI.get("/projects", getAllProject);
-routerAPI.delete("/projects", deleteProject);
-routerAPI.put("/projects", putUpdateProject);
+routerAPI.post("/projects", authMiddleware, postCreateProject);
+routerAPI.get("/projects", authMiddleware, getAllProject);
+routerAPI.delete("/projects", authMiddleware, deleteProject);
+routerAPI.put("/projects", authMiddleware, putUpdateProject);
 
-routerAPI.post("/tasks", postCreateTask);
-routerAPI.get("/tasks", getAllTasks);
-routerAPI.delete("/tasks", deleteTask);
-routerAPI.put("/tasks", updateTask);
+routerAPI.post("/tasks", authMiddleware, postCreateTask);
+routerAPI.get("/tasks", authMiddleware, getAllTasks);
+routerAPI.delete("/tasks", authMiddleware, deleteTask);
+routerAPI.put("/tasks", authMiddleware, updateTask);
 //query string => không cần khai báo thêm route, đứng sau dấu ?
 // routerAPI.get("/info", (req, res) => {
 //   console.log("check query : ", req.query);
@@ -68,5 +78,8 @@ routerAPI.put("/tasks", updateTask);
 //     data: req.params,
 //   });
 // });
+
+routerAPI.post("/register", postRegister);
+routerAPI.post("/login", postLogin);
 
 module.exports = routerAPI;
