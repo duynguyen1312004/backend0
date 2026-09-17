@@ -21,6 +21,11 @@ const projectSchema = mongoose.Schema(
       type: String,
       required: true, //thuộc tính bắt buộc
     },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", //tham chiếu đến user nhờ cái id
+      required: true,
+    },
     startDate: String,
     endDate: String,
     description: String,

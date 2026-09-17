@@ -2,9 +2,9 @@ const Project = require("../models/project");
 const aqp = require("api-query-params");
 const Task = require("../models/task");
 
-const createProjectService = async (data) => {
+const createProjectService = async (data, userId) => {
   if (data.type === "EMPTY-PROJECT") {
-    let result = await Project.create(data);
+    let result = await Project.create({ ...data, createdBy: userId });
     return result;
   }
   if (data.type === "ADD-USERS") {
