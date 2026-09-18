@@ -5,7 +5,10 @@ const userSchema = mongoose.Schema({
 
   email: String,
 
-  password: String,
+  password: {
+    type: String,
+    select: false,
+  },
 
   city: String,
 });

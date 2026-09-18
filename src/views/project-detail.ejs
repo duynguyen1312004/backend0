@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>
+      <%= project.name %> - TaskFlow
+    </title>
+
+    <link rel="stylesheet" href="/css/project-detail.css" />
+  </head>
+
+  <body>
+    <div class="app-layout">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-icon">✓</div>
+          <span>TaskFlow</span>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="/" class="nav-item">
+            <span class="nav-icon">⌂</span>
+            Dashboard
+          </a>
+
+          <a href="/projects" class="nav-item active">
+            <span class="nav-icon">▦</span>
+            Projects
+          </a>
+
+          <a href="/create" class="nav-item">
+            <span class="nav-icon">＋</span>
+            Create User
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <a href="/projects" class="back-link">
+            ← Back to Projects
+          </a>
+        </div>
+      </aside>
+
+
+      <!-- Main Content -->
+      <main class="main-content">
+
+        <!-- Header -->
+        <header class="page-header">
+          <div>
+            <p class="page-label">PROJECT DETAILS</p>
+
+            <h1>
+              <%= project.name %>
+            </h1>
+
+            <p class="page-description">
+              View project information, members and tasks.
+            </p>
+          </div>
+
+          <a href="/projects" class="back-button">
+            ← All Projects
+          </a>
+        </header>
+
+
+        <!-- Project Overview -->
+        <section class="project-hero">
+          <div class="project-hero-content">
+            <span class="project-badge">
+              Project
+            </span>
+
+            <h2>
+              <%= project.name %>
+            </h2>
+
+            <p>
+              <%= project.description || "No description available." %>
+            </p>
+          </div>
+
+          <div class="project-hero-icon">
+            ▦
+          </div>
+        </section>
+
+
+        <!-- Project Information -->
+        <section class="content-section">
+          <div class="section-heading">
+            <h2>Project Information</h2>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-icon">▣</div>
+
+              <div>
+                <span class="info-label">
+                  Project ID
+                </span>
+
+                <strong>
+                  <%= project.id || "N/A" %>
+                </strong>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-icon">◷</div>
+
+              <div>
+                <span class="info-label">
+                  Start Date
+                </span>
+
+                <strong>
+                  <%= project.startDate || "N/A" %>
+                </strong>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-icon">◴</div>
+
+              <div>
+                <span class="info-label">
+                  End Date
+                </span>
+
+                <strong>
+                  <%= project.endDate || "N/A" %>
+                </strong>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-icon">✓</div>
+
+              <div>
+                <span class="info-label">
+                  Total Tasks
+                </span>
+
+                <strong>
+                  <%= project.tasks ? project.tasks.length : 0 %>
+                </strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- Description -->
+        <section class="content-section">
+          <div class="section-heading">
+            <h2>Description</h2>
+          </div>
+
+          <div class="description-card">
+            <p>
+              <%= project.description || "No description available." %>
+            </p>
+          </div>
+        </section>
+
+
+        <!-- Created By -->
+        <section class="content-section">
+          <div class="section-heading">
+            <h2>Created By</h2>
+          </div>
+
+          <% if (project.createdBy) { %>
+
+            <div class="creator-card">
+              <div class="avatar">
+                <%= project.createdBy.name
+                  ? project.createdBy.name.charAt(0).toUpperCase()
+                  : "U" %>
+              </div>
+
+              <div class="creator-info">
+                <h3>
+                  <%= project.createdBy.name || "Unknown User" %>
+                </h3>
+
+                <p>
+                  <%= project.createdBy.email || "No email available" %>
+                </p>
+
+                <span class="creator-role">
+                  Project Creator
+                </span>
+              </div>
+            </div>
+
+          <% } else { %>
+
+            <div class="empty-card">
+              <p>No creator information</p>
+            </div>
+
+          <% } %>
+        </section>
+
+
+        <!-- Members -->
+        <section class="content-section">
+          <div class="section-heading">
+            <h2>Members</h2>
+
+            <span class="section-count">
+              <%= project.usersInfor
+                ? project.usersInfor.length
+                : 0 %>
+              members
+            </span>
+          </div>
+
+          <% if (
+            project.usersInfor &&
+            project.usersInfor.length > 0
+          ) { %>
+
+            <div class="members-grid">
+              <% project.usersInfor.forEach((user) => { %>
+
+                <div class="member-card">
+                  <div class="member-avatar">
+                    <%= user.name
+                      ? user.name.charAt(0).toUpperCase()
+                      : "U" %>
+                  </div>
+
+                  <div class="member-info">
+                    <h3>
+                      <%= user.name || "Unknown User" %>
+                    </h3>
+
+                    <p>
+                      <%= user.email || "No email available" %>
+                    </p>
+                  </div>
+                </div>
+
+              <% }) %>
+            </div>
+
+          <% } else { %>
+
+            <div class="empty-card">
+              <div class="empty-icon">♙</div>
+
+              <h3>No members</h3>
+
+              <p>
+                This project does not have any members yet.
+              </p>
+            </div>
+
+          <% } %>
+        </section>
+
+
+        <!-- Tasks -->
+        <section class="content-section">
+          <div class="section-heading">
+            <h2>Tasks</h2>
+
+            <span class="section-count">
+              <%= project.tasks
+                ? project.tasks.length
+                : 0 %>
+              tasks
+            </span>
+          </div>
+
+          <% if (
+            project.tasks &&
+            project.tasks.length > 0
+          ) { %>
+
+            <div class="tasks-table-wrapper">
+              <table class="tasks-table">
+                <thead>
+                  <tr>
+                    <th>Task Name</th>
+                    <th>Status</th>
+                    <th>End Date</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <% project.tasks.forEach((task) => { %>
+
+                    <tr>
+                      <td>
+                        <div class="task-name">
+                          <span class="task-icon">✓</span>
+
+                          <strong>
+                            <%= task.name || "Unnamed Task" %>
+                          </strong>
+                        </div>
+                      </td>
+
+                      <td>
+                        <%
+                          const taskStatus =
+                            task.status || "N/A";
+
+                          let statusClass = "status-default";
+
+                          if (
+                            taskStatus.toLowerCase() === "done" ||
+                            taskStatus.toLowerCase() === "completed"
+                          ) {
+                            statusClass = "status-completed";
+                          } else if (
+                            taskStatus.toLowerCase() === "in progress"
+                          ) {
+                            statusClass = "status-progress";
+                          } else if (
+                            taskStatus.toLowerCase() === "pending" ||
+                            taskStatus.toLowerCase() === "todo"
+                          ) {
+                            statusClass = "status-pending";
+                          }
+                        %>
+
+                        <span class="status-badge <%= statusClass %>">
+                          <%= taskStatus %>
+                        </span>
+                      </td>
+
+                      <td>
+                        <span class="task-date">
+                          <%= task.endDate || "N/A" %>
+                        </span>
+                      </td>
+                    </tr>
+
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+
+          <% } else { %>
+
+            <div class="empty-card">
+              <div class="empty-icon">✓</div>
+
+              <h3>No tasks</h3>
+
+              <p>
+                This project does not have any tasks yet.
+              </p>
+            </div>
+
+          <% } %>
+        </section>
+        <!-- Bottom Actions -->
+        <div class="page-actions">
+            <a href="/projects" class="btn btn-secondary">
+                ← Back to Projects
+            </a>
+
+            <a 
+                href="/projects/<%= project._id %>/tasks/create" 
+                class="btn btn-primary"
+            >
+                + Create Task
+            </a>
+        </div>
+
+      </main>
+    </div>
+  </body>
+</html>

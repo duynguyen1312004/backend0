@@ -1,71 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Updated A User</title>
-    <link rel="stylesheet" href="/css/styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Edit User - TaskFlow</title>
+
+    <link rel="stylesheet" href="/css/edit.css" />
   </head>
 
   <body>
-    <h1>Hello EJS!</h1>
+    <div class="edit-container">
+      <div class="edit-card">
+        <div class="edit-header">
+          <h1>Edit User</h1>
+          <p>Update user information</p>
+        </div>
 
-    <div class="topnav">
-      <a href="/">Home</a>
-      <a href="/create">Create Users</a>
-    </div>
-    <div class="form">
-      <form action="/update-user" method="POST">
-        <fieldset>
-          <legend>Update new users</legend>
+        <form action="/update-user" method="POST">
+          <fieldset>
+            <legend>User Information</legend>
 
-          <div class="input-group d-none">
-            <label for="userId">Id:</label>
-            <input
-              type="text"
-              id="userId"
-              name="userId"
-              value="<%= userEdit.id %>"
-            />
-          </div>
+            <div class="input-group hidden">
+              <label for="userId">ID</label>
+              <input
+                type="text"
+                id="userId"
+                name="userId"
+                value="<%= userEdit.id %>"
+                readonly
+              />
+            </div>
 
-          <div class="input-group">
-            <label for="email">Email:</label>
-            <input
-              type="text"
-              id="emailId"
-              name="email"
-              value="<%= userEdit.email %>"
-            />
-          </div>
+            <div class="input-group">
+              <label for="emailId">Email</label>
+              <input
+                type="email"
+                id="emailId"
+                name="email"
+                value="<%= userEdit.email %>"
+                required
+              />
+            </div>
 
-          <div class="input-group">
-            <label for="name">Name:</label>
-            <input
-              type="text"
-              id="nameId"
-              name="name"
-              value="<%= userEdit.name %>"
-            />
-          </div>
+            <div class="input-group">
+              <label for="nameId">Name</label>
+              <input
+                type="text"
+                id="nameId"
+                name="name"
+                value="<%= userEdit.name %>"
+                required
+              />
+            </div>
 
-          <div class="input-group">
-            <label for="city">City:</label>
-            <input
-              type="text"
-              id="city"
-              name="city"
-              value="<%= userEdit.city %>"
-            />
-          </div>
+            <div class="input-group">
+              <label for="city">City</label>
+              <input
+                type="text"
+                id="city"
+                name="city"
+                value="<%= userEdit.city %>"
+                required
+              />
+            </div>
 
-          <div class="input-group">
-            <button type="submit">Save</button>
-          </div>
-        </fieldset>
-      </form>
-    </div>
-
-    <div>
-      <img src="/images/duy.jpg" alt="Duy" />
+            <div class="form-actions">
+              <a href="/" class="btn btn-cancel">Cancel</a>
+              <button type="submit" class="btn btn-save">Save Changes</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
     </div>
   </body>
 </html>

@@ -4,18 +4,36 @@ const Task = require("../models/task");
 
 const createProjectService = async (data, userId) => {
   if (data.type === "EMPTY-PROJECT") {
-    let result = await Project.create({ ...data, createdBy: userId });
+    let result = await Project.create({
+      ...data,
+      createdBy: userId,
+    });
+
     return result;
   }
-  if (data.type === "ADD-USERS") {
-    let myProject = await Project.findById(data.projectId).exec();
 
-    for (let i = 0; i < data.usersArr.length; i++) {
-      myProject.usersInfor.push(data.usersArr[i]);
-    }
-    let newResult = await myProject.save();
-    return newResult;
+  if (data.type === "ADD-USERS") {
+    console.log("PROJECT ID RECEIVED:", data.projectId);
+    console.log("TYPE RECEIVED:", data.type);
+    let result = await Project.updateOne(
+      { _id: data.projectId },
+      {
+        $addToSet: {
+          usersInfor: {
+            $each: data.usersArr,
+          },
+        },
+      },
+    );
+    console.log("ADD USERS RESULT:", result);
+
+    let project = await Project.findById(data.projectId);
+
+    console.log("PROJECT AFTER UPDATE:", project);
+
+    return result;
   }
+
   return null;
 };
 
@@ -60,12 +78,12 @@ const deleteProjectService = async (data) => {
 
 const putUpdateProjectService = async (idProject, data) => {
   try {
-    if (data.type === "ADD-TASK") {
+    if (data.type === "ADD-USERS") {
       let result = await Project.updateOne(
         { _id: idProject },
         {
-          $push: {
-            tasks: data.idTask, //thêm idTask vào trong array tasks
+          $addToSet: {
+            usersInfor: data.userId,
           },
         },
       );

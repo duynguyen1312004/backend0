@@ -32,8 +32,17 @@ const taskSchema = mongoose.Schema(
     status: String,
     startDate: String,
     endDate: String,
-    usersInfor: userSchema, //reperence: 1 nhân viên có thể có nhiều task
-    projectInfor: projectSchema,
+    // usersInfor: userSchema, //reperence: 1 nhân viên có thể có nhiều task
+    // projectInfor: projectSchema,
+    assignedTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
+
+    projectId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "project",
+    },
   },
   {
     timestamps: true, //khi thêm cái trường timestamps tự động nó có createdAt và updatedAt

@@ -1,7 +1,18 @@
 const Task = require("../models/task");
+const Project = require("../models/project");
 const postCreateTaskService = async (data) => {
   try {
     let result = await Task.create(data);
+    // Thêm Task vào Project
+    await Project.updateOne(
+      { _id: data.projectId },
+      {
+        $push: {
+          tasks: result._id,
+        },
+      },
+    );
+
     return result;
   } catch (error) {
     console.log("error : ", error);
@@ -25,21 +36,43 @@ const getTaskService = async (data) => {
 const deleteTaskService = async (data) => {
   try {
     const idTask = data.idTask;
-    const idUser = data.idUser;
-    if (data.type === "REMOVE-USER") {
+
+    // Bỏ người được assign khỏi Task
+    if (data.type === "REMOVE-ASSIGNED-USER") {
       let result = await Task.updateOne(
         { _id: idTask },
         {
-          $pull: {
-            usersInfor: idUser,
+          $unset: {
+            assignedTo: 1,
           },
         },
       );
+
       return result;
     }
+
+    // Xóa Task
     if (data.type === "REMOVE-TASK") {
-      let result = await Task.deleteById(idTask); //đẩy biến deleted = true
-      console.log("Delete result:", result);
+      // Tìm Task trước để lấy projectId
+      const task = await Task.findById(idTask);
+
+      if (!task) {
+        return null;
+      }
+
+      // Soft delete Task
+      let result = await Task.deleteById(idTask);
+
+      // Xóa taskId khỏi Project.tasks
+      await Project.updateOne(
+        { _id: task.projectId },
+        {
+          $pull: {
+            tasks: task._id,
+          },
+        },
+      );
+
       return result;
     }
   } catch (error) {

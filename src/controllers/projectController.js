@@ -6,6 +6,8 @@ const {
 } = require("../services/projectService");
 
 const postCreateProject = async (req, res) => {
+  console.log("BODY:", req.body);
+  console.log("USER:", req.user);
   let result = await createProjectService(req.body, req.user.userId);
   return res.status(200).json({
     EC: 0,
@@ -29,17 +31,26 @@ const deleteProject = async (req, res) => {
 };
 
 const putUpdateProject = async (req, res) => {
-  const { idProject, type, idTask, name, endDate, description } = req.body;
-
+  console.log(">>> PUT PROJECT CONTROLLER");
+  console.log("BODY:", req.body);
+  console.log("USER:", req.user);
+  const { idProject, type, idTask, userId, name, endDate, description } =
+    req.body;
+  console.log("idProject:", idProject);
+  console.log("type:", type);
   const data = {
+    idProject,
     type,
     idTask,
+    userId,
     name,
     endDate,
     description,
   };
+  console.log("DATA:", data);
 
   let result = await putUpdateProjectService(idProject, data);
+  console.log("RESULT:", result);
   return res.status(200).json({
     EC: 0,
     data: result,

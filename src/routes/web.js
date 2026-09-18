@@ -9,14 +9,18 @@ const {
   postUpdateUser,
   postDeleteUser,
   postHandleRemoveUser,
+  getProjectPage,
+  getProjectDetailPage,
+
+  getCreateTaskPage,
 } = require("../controllers/homeController");
 
 const {
   getLoginPage,
   getRegisterPage,
-  postRegister,
-  postLogin,
 } = require("../controllers/authController");
+
+const { postCreateTask } = require("../controllers/taskController");
 
 //router Method('/route',handler)
 router.get("/", getHomePage);
@@ -34,7 +38,11 @@ router.post("/delete-user", postHandleRemoveUser);
 //login
 router.get("/login", getLoginPage);
 router.get("/register", getRegisterPage);
-router.post("/register", postRegister);
-router.post("/login", postLogin);
+//project
+router.get("/projects", getProjectPage);
+router.get("/projects/:id", getProjectDetailPage);
+router.get("/projects/:id/tasks/create", getCreateTaskPage);
+
+router.post("/projects/:id/tasks/create", postCreateTask);
 
 module.exports = router;
