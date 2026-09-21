@@ -1,0 +1,229 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f7fb;
+  color: #1f2937;
+}
+
+/* Page */
+
+.page-container {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+}
+
+/* Delete Card */
+
+.delete-card {
+  width: 100%;
+  max-width: 500px;
+
+  padding: 38px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+
+  text-align: center;
+}
+
+/* Warning Icon */
+
+.warning-icon {
+  width: 64px;
+  height: 64px;
+
+  margin: 0 auto 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #fee2e2;
+  color: #dc2626;
+
+  font-size: 30px;
+  font-weight: 700;
+}
+
+/* Title */
+
+.delete-card h1 {
+  margin-bottom: 12px;
+
+  color: #111827;
+
+  font-size: 27px;
+}
+
+/* Warning */
+
+.warning-text {
+  margin-bottom: 28px;
+
+  color: #6b7280;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* User information */
+
+.user-info {
+  margin-bottom: 28px;
+
+  padding: 5px 20px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  background: #f9fafb;
+
+  text-align: left;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+
+  padding: 16px 0;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  color: #6b7280;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.value {
+  max-width: 65%;
+
+  color: #111827;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  text-align: right;
+
+  overflow-wrap: anywhere;
+}
+
+/* Buttons */
+
+.actions {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 130px;
+
+  padding: 12px 18px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+/* Cancel */
+
+.btn-cancel {
+  border: 1px solid #d1d5db;
+
+  background: #ffffff;
+
+  color: #374151;
+}
+
+.btn-cancel:hover {
+  background: #f3f4f6;
+}
+
+/* Delete */
+
+.btn-delete {
+  border: none;
+
+  background: #dc2626;
+
+  color: #ffffff;
+}
+
+.btn-delete:hover {
+  background: #b91c1c;
+
+  transform: translateY(-1px);
+}
+
+/* Mobile */
+
+@media (max-width: 550px) {
+  .page-container {
+    padding: 20px;
+  }
+
+  .delete-card {
+    padding: 28px 22px;
+  }
+
+  .info-row {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 6px;
+  }
+
+  .value {
+    max-width: 100%;
+
+    text-align: left;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

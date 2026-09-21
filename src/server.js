@@ -7,11 +7,14 @@ const apiRoutes = require("./routes/api");
 
 const fileUpload = require("express-fileupload");
 const { MongoClient } = require("mongodb");
+const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+//cookie
+app.use(cookieParser());
 
 // Initialize the file upload middleware
 app.use(fileUpload());

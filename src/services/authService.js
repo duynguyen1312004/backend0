@@ -56,6 +56,7 @@ const postLoginService = async (data) => {
     const payload = {
       userId: user._id,
       email: user.email,
+      role: user.role,
     };
 
     const access_token = jwt.sign(payload, process.env.JWT_SECRET, {

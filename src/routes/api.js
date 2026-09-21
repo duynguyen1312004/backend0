@@ -1,5 +1,8 @@
 const express = require("express");
 const routerAPI = express.Router();
+
+const authMiddleware = require("../middlewares/authMiddleware");
+const roleMiddleware = require("../middlewares/roleMiddleware");
 const {
   getUsersAPI,
   postCreateUserAPI,
@@ -8,6 +11,7 @@ const {
   postUploadSingleFileAPI,
   postUploadMultipleFilesAPI,
 } = require("../controllers/apiController");
+
 const {
   postCreateCustomer,
   postCreateArrayCustomer,
@@ -16,12 +20,14 @@ const {
   deleteACustomer,
   deleteArrayCustomers,
 } = require("../controllers/customerController");
+
 const {
   postCreateProject,
   getAllProject,
   deleteProject,
   putUpdateProject,
 } = require("../controllers/projectController");
+
 const {
   postCreateTask,
   getAllTasks,
@@ -35,51 +41,73 @@ const {
   getProfile,
 } = require("../controllers/authController");
 
-const authMiddleware = require("../middlewares/authMiddleware");
-//Middleware
-routerAPI.get("/profile", authMiddleware, getProfile);
-//router Method('/route',handler)
+// ==================== AUTH ====================
 
-routerAPI.get("/users", getUsersAPI);
+routerAPI.post("/register", postRegister);
+routerAPI.post("/login", postLogin);
+
+routerAPI.get("/profile", authMiddleware, getProfile);
+
+// ==================== USERS ====================
+
+routerAPI.get("/users", authMiddleware, roleMiddleware("ADMIN"), getUsersAPI);
 routerAPI.post("/users", postCreateUserAPI);
 routerAPI.put("/users", putUpdateUserAPI);
 routerAPI.delete("/users", deleteUserAPI);
 
-routerAPI.post("/file", postUploadSingleFileAPI);
-routerAPI.post("/files", postUploadMultipleFilesAPI);
+// ==================== CUSTOMERS ====================
 
 routerAPI.post("/customers", postCreateCustomer);
 routerAPI.post("/customers-many", postCreateArrayCustomer);
+
 routerAPI.get("/customers", getAllCustomers);
+
 routerAPI.put("/customers", putUpdateCustomers);
+
 routerAPI.delete("/customers", deleteACustomer);
 routerAPI.delete("/customers-many", deleteArrayCustomers);
 
+// ==================== PROJECTS ====================
+
 routerAPI.post("/projects", authMiddleware, postCreateProject);
 routerAPI.get("/projects", authMiddleware, getAllProject);
-routerAPI.delete("/projects", authMiddleware, deleteProject);
+
 routerAPI.put("/projects", authMiddleware, putUpdateProject);
+routerAPI.delete("/projects", authMiddleware, deleteProject);
+
+// ==================== TASKS ====================
 
 routerAPI.post("/tasks", authMiddleware, postCreateTask);
 routerAPI.get("/tasks", authMiddleware, getAllTasks);
-routerAPI.delete("/tasks", authMiddleware, deleteTask);
+
 routerAPI.put("/tasks", authMiddleware, updateTask);
-//query string => không cần khai báo thêm route, đứng sau dấu ?
-// routerAPI.get("/info", (req, res) => {
-//   console.log("check query : ", req.query);
-//   return res.status(200).json({
-//     data: req.query,
-//   });
-// });
-//params string => cần khai báo thêm route, và truyền lên ít data
+routerAPI.delete("/tasks", authMiddleware, deleteTask);
+
+// ==================== FILE UPLOAD ====================
+
+routerAPI.post("/file", postUploadSingleFileAPI);
+routerAPI.post("/files", postUploadMultipleFilesAPI);
+
+// ==================== QUERY / PARAMS NOTES ====================
+
+// Query string:
+// Không cần khai báo thêm route.
+// Ví dụ:
+// GET /users?name=Duy
+//
+// req.query
+
+// Params:
+// Cần khai báo params trong route.
+// Ví dụ:
+// GET /users/Duy/HCM
+//
 // routerAPI.get("/info/:name/:address", (req, res) => {
-//   console.log("check params : ", req.params);
+//   console.log("check params:", req.params);
+//
 //   return res.status(200).json({
 //     data: req.params,
 //   });
 // });
-
-routerAPI.post("/register", postRegister);
-routerAPI.post("/login", postLogin);
 
 module.exports = routerAPI;

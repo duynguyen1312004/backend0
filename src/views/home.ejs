@@ -100,8 +100,8 @@
             <div class="profile-avatar">D</div>
 
             <div class="profile-info">
-              <strong>Duy Nguyen</strong>
-              <span>Administrator</span>
+              <h3><%= currentUser.name %></h3>
+              <p><%= currentUser.email %></p>
             </div>
 
             <span class="profile-more">•••</span>
@@ -122,7 +122,7 @@
           <div class="header-title">
             <p class="page-eyebrow">OVERVIEW</p>
 
-            <h1>Good morning, Duy <span>👋</span></h1>
+            <h1>Good morning, <%= currentUser.name.toUpperCase() %> <span>👋</span></h1>
 
             <p>
               Here's what's happening with your workspace.
@@ -138,11 +138,11 @@
             </button>
 
             <div class="header-user">
-              <div class="header-avatar">D</div>
+              <div class="header-avatar"><%= currentUser.name.charAt(0).toUpperCase() %></div>
 
               <div>
-                <strong>Duy Nguyen</strong>
-                <span>Administrator</span>
+                <h3><%= currentUser.name %></h3>
+                <p><%= currentUser.email %></p>
               </div>
             </div>
 
@@ -408,17 +408,18 @@
 
             <div class="profile-card-body">
 
-              <div class="large-avatar">D</div>
+              <div class="large-avatar">
+                <%= currentUser.name.charAt(0).toUpperCase() %>
+              </div>
 
-              <h3>Duy Nguyen</h3>
-
-              <p>Administrator</p>
+              <h3><%= currentUser.name %></h3>
+              <p><%= currentUser.email %></p>
 
               <div class="profile-divider"></div>
 
               <div class="profile-detail">
                 <span>Email</span>
-                <strong>duy@example.com</strong>
+                <strong><%= currentUser.email %></strong>
               </div>
 
               <div class="profile-detail">

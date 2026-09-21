@@ -17,11 +17,12 @@ const getHomePage = async (req, res) => {
   let users = await User.find({});
   let projects = await Project.find({});
   let tasks = await Task.find({});
-
+  let currentUser = await User.findById(req.user.userId);
   return res.render("home.ejs", {
     listUsers: users,
     listProjects: projects,
     listTasks: tasks,
+    currentUser: currentUser,
   });
 };
 
@@ -78,14 +79,14 @@ const postUpdateUser = async (req, res) => {
   res.redirect("/"); //tro ve trang chu
 };
 
-const postDeleteUser = async (req, res) => {
+const getDeleteUserPage = async (req, res) => {
   const userId = req.params.id;
   let user = await User.findById(userId);
 
-  res.render("delete.ejs", { userEdit: user });
+  res.render("delete-user.ejs", { userEdit: user });
 };
 
-const postHandleRemoveUser = async (req, res) => {
+const postRemoveUser = async (req, res) => {
   let userId = req.body.userId;
   let result = await User.deleteOne({ _id: userId });
   console.log(">> result: ", result);
@@ -171,8 +172,8 @@ module.exports = {
   postCreateUser,
   getCreatePage,
   postUpdateUser,
-  postDeleteUser,
-  postHandleRemoveUser,
+  getDeleteUserPage,
+  postRemoveUser,
   getProjectPage,
   getProjectDetailPage,
   getCreateTaskPage,

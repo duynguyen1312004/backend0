@@ -15,7 +15,19 @@ const getRegisterPage = (req, res) => {
 
 const postLogin = async (req, res) => {
   const result = await postLoginService(req.body);
-  return res.status(200).json(result);
+
+  if (result.EC !== 0) {
+    return res.render("login.ejs", {
+      error: result.message,
+    });
+  }
+
+  res.cookie("access_token", result.data.access_token, {
+    httpOnly: true,
+    maxAge: 60 * 60 * 1000,
+  });
+
+  return res.redirect("/");
 };
 
 const postRegister = async (req, res) => {

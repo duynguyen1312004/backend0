@@ -50,58 +50,108 @@ const getProjectService = async (data) => {
   return result;
 };
 
-const deleteProjectService = async (data) => {
+const deleteProjectService = async (projectId, data, userId) => {
   try {
-    const idProject = data.idProject;
-    const idUser = data.idUser;
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return {
+        EC: -1,
+        statusCode: 404,
+        message: "Project not found",
+      };
+    }
+
+    // Authorization
+    if (project.createdBy.toString() !== userId.toString()) {
+      return {
+        EC: -1,
+        statusCode: 403,
+        message: "You do not have permission",
+      };
+    }
+
+    // Remove user
     if (data.type === "REMOVE-USER") {
-      let result = await Project.updateOne(
-        { _id: idProject },
+      const result = await Project.updateOne(
+        { _id: projectId },
         {
           $pull: {
-            usersInfor: idUser,
+            usersInfor: data.userId,
           },
         },
       );
+
       return result;
     }
+
+    // Remove project
     if (data.type === "REMOVE-PROJECT") {
-      let result = await Project.deleteById(idProject); //đẩy biến deleted = true
+      const result = await Project.deleteById(projectId);
+
       console.log("Delete result:", result);
+
       return result;
     }
   } catch (error) {
-    console.log("error : ", error);
+    console.log("error:", error);
     return null;
   }
 };
 
-const putUpdateProjectService = async (idProject, data) => {
+const putUpdateProjectService = async (projectId, data, userId) => {
   try {
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return {
+        EC: -1,
+        statusCode: 404,
+        message: "Project not found",
+      };
+    }
+
+    // Authorization
+    if (project.createdBy.toString() !== userId.toString()) {
+      return {
+        EC: -1,
+        statusCode: 403,
+        message: "You do not have permission to update this project",
+      };
+    }
+
+    // Add user
     if (data.type === "ADD-USERS") {
-      let result = await Project.updateOne(
-        { _id: idProject },
+      const result = await Project.updateOne(
+        { _id: projectId },
         {
           $addToSet: {
             usersInfor: data.userId,
           },
         },
       );
+
       return result;
     }
-    let result = await Project.updateOne(
-      { _id: idProject },
+
+    // Update project information
+    const result = await Project.updateOne(
+      { _id: projectId },
       {
-        ...data, //hoặc bỏ đi {} chỉ còn data thôi là nó đúng
+        $set: {
+          name: data.name,
+          endDate: data.endDate,
+          description: data.description,
+        },
       },
     );
+
     return result;
   } catch (error) {
-    console.log("error : ", error);
+    console.log("error:", error);
     return null;
   }
 };
-
 module.exports = {
   createProjectService,
   getProjectService,

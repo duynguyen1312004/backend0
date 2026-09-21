@@ -50,7 +50,6 @@ const deleteTaskService = async (data) => {
 
       return result;
     }
-
     // Xóa Task
     if (data.type === "REMOVE-TASK") {
       // Tìm Task trước để lấy projectId
@@ -81,18 +80,65 @@ const deleteTaskService = async (data) => {
   }
 };
 
-const putUpdateTaskService = async (idTask, data) => {
+const putUpdateTaskService = async (taskId, data, userId) => {
   try {
-    let result = await Task.updateOne(
-      { _id: idTask },
+    const task = await Task.findById(taskId);
+
+    if (!task) {
+      return {
+        EC: -1,
+        statusCode: 404,
+        message: "Task not found",
+      };
+    }
+
+    const project = await Project.findById(task.projectId);
+    console.log("project:", project);
+    console.log("project.createdBy:", project.createdBy);
+    console.log("task.assignedTo:", task.assignedTo);
+    console.log("userId:", userId);
+    if (!project) {
+      return {
+        EC: -1,
+        statusCode: 404,
+        message: "Project not found",
+      };
+    }
+    //Người đang đăng nhập có phải chủ Project không?
+    const isCreator = project.createdBy.toString() === userId.toString();
+    //Người đang đăng nhập có phải người được giao Task không?
+    const isAssignedUser =
+      task.assignedTo && task.assignedTo.toString() === userId.toString();
+
+    if (!isCreator && !isAssignedUser) {
+      return {
+        EC: -1,
+        statusCode: 403,
+        message: "You do not have permission to update this task",
+      };
+    }
+
+    const result = await Task.updateOne(
+      { _id: taskId },
       {
-        ...data, //hoặc bỏ đi {} chỉ còn data thôi là nó đúng
+        $set: {
+          name: data.name,
+          endDate: data.endDate,
+          description: data.description,
+          status: data.status,
+        },
       },
     );
+
     return result;
   } catch (error) {
-    console.log("error : ", error);
-    return null;
+    console.log("error:", error);
+
+    return {
+      EC: -1,
+      statusCode: 500,
+      message: "Internal server error",
+    };
   }
 };
 

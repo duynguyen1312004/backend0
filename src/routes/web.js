@@ -1,48 +1,66 @@
 const express = require("express");
 const router = express.Router();
+const authMiddleware = require("../middlewares/authMiddleware");
+
+// Controllers
 const {
   getHomePage,
   getABC,
+
+  // User
   postCreateUser,
   getCreatePage,
   getUpdatePage,
   postUpdateUser,
-  postDeleteUser,
-  postHandleRemoveUser,
+  getDeleteUserPage,
+  postRemoveUser,
+
+  // Project
   getProjectPage,
   getProjectDetailPage,
 
+  // Task
   getCreateTaskPage,
 } = require("../controllers/homeController");
 
 const {
+  postLogin,
   getLoginPage,
   getRegisterPage,
 } = require("../controllers/authController");
 
 const { postCreateTask } = require("../controllers/taskController");
 
-//router Method('/route',handler)
-router.get("/", getHomePage);
+// ==================== HOME ====================
+
+router.get("/", authMiddleware, getHomePage);
 router.get("/abc", getABC);
+
+// ==================== USER ====================
+
 router.get("/create", getCreatePage);
 router.post("/create-user", postCreateUser);
-//update theo id
+
 router.get("/update/:id", getUpdatePage);
-//bấm nút save update
 router.post("/update-user", postUpdateUser);
-//xóa theo id
-router.post("/delete-user/:id", postDeleteUser);
-//bấm nút xóa
-router.post("/delete-user", postHandleRemoveUser);
-//login
+
+router.post("/delete-user/:id", getDeleteUserPage);
+router.post("/delete-user", postRemoveUser);
+
+// ==================== AUTH ====================
+
 router.get("/login", getLoginPage);
+router.post("/login", postLogin);
 router.get("/register", getRegisterPage);
-//project
+
+// ==================== PROJECT ====================
+
 router.get("/projects", getProjectPage);
 router.get("/projects/:id", getProjectDetailPage);
-router.get("/projects/:id/tasks/create", getCreateTaskPage);
 
+// ==================== TASK ====================
+
+router.get("/projects/:id/tasks/create", getCreateTaskPage);
 router.post("/projects/:id/tasks/create", postCreateTask);
 
 module.exports = router;

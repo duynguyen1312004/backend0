@@ -11,6 +11,12 @@ const userSchema = mongoose.Schema({
   },
 
   city: String,
+
+  role: {
+    type: String,
+    enum: ["USER", "ADMIN"],
+    default: "USER",
+  },
 });
 
 const User = mongoose.model("user", userSchema); //(collection, ten schema)
