@@ -1,9 +1,22 @@
 const Task = require("../models/task");
 const Project = require("../models/project");
-const postCreateTaskService = async (data) => {
+const postCreateTaskService = async (data, userId) => {
   try {
-    let result = await Task.create(data);
+    // Tìm project
+    const project = await Project.findById(data.projectId);
+    if (!project) {
+      return { EC: -1, statusCode: 404, message: "Project not found" };
+    } // Kiểm tra Creator
+    if (project.createdBy.toString() !== userId.toString()) {
+      return {
+        EC: -1,
+        statusCode: 403,
+        message: "You do not have permission to create task",
+      };
+    } // Tạo Task
+    const result = await Task.create(data);
     // Thêm Task vào Project
+
     await Project.updateOne(
       { _id: data.projectId },
       {
@@ -33,14 +46,44 @@ const getTaskService = async (data) => {
   return result;
 };
 
-const deleteTaskService = async (data) => {
+const deleteTaskService = async (data, userId) => {
   try {
-    const idTask = data.idTask;
+    const taskId = data.taskId;
+
+    // Tìm Task
+    const task = await Task.findById(taskId);
+
+    if (!task) {
+      return {
+        EC: -1,
+        statusCode: 404,
+        message: "Task not found",
+      };
+    }
 
     // Bỏ người được assign khỏi Task
     if (data.type === "REMOVE-ASSIGNED-USER") {
+      // Tìm Project
+      const project = await Project.findById(task.projectId);
+
+      if (!project) {
+        return {
+          EC: -1,
+          statusCode: 404,
+          message: "Project not found",
+        };
+      }
+
+      // Chỉ Project Creator được bỏ assigned user
+      if (project.createdBy.toString() !== userId.toString()) {
+        return {
+          EC: -1,
+          statusCode: 403,
+          message: "You do not have permission",
+        };
+      }
       let result = await Task.updateOne(
-        { _id: idTask },
+        { _id: taskId },
         {
           $unset: {
             assignedTo: 1,
@@ -52,15 +95,28 @@ const deleteTaskService = async (data) => {
     }
     // Xóa Task
     if (data.type === "REMOVE-TASK") {
-      // Tìm Task trước để lấy projectId
-      const task = await Task.findById(idTask);
+      // Tìm Project
+      const project = await Project.findById(task.projectId);
 
-      if (!task) {
-        return null;
+      if (!project) {
+        return {
+          EC: -1,
+          statusCode: 404,
+          message: "Project not found",
+        };
+      }
+
+      // Chỉ Project Creator được xóa Task
+      if (project.createdBy.toString() !== userId.toString()) {
+        return {
+          EC: -1,
+          statusCode: 403,
+          message: "You do not have permission to delete this task",
+        };
       }
 
       // Soft delete Task
-      let result = await Task.deleteById(idTask);
+      const result = await Task.deleteById(taskId);
 
       // Xóa taskId khỏi Project.tasks
       await Project.updateOne(
@@ -93,10 +149,11 @@ const putUpdateTaskService = async (taskId, data, userId) => {
     }
 
     const project = await Project.findById(task.projectId);
-    console.log("project:", project);
-    console.log("project.createdBy:", project.createdBy);
-    console.log("task.assignedTo:", task.assignedTo);
-    console.log("userId:", userId);
+
+    // console.log("project:", project);
+    // console.log("project.createdBy:", project.createdBy);
+    // console.log("task.assignedTo:", task.assignedTo);
+    // console.log("userId:", userId);
     if (!project) {
       return {
         EC: -1,

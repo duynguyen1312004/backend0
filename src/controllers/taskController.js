@@ -6,7 +6,12 @@ const {
 } = require("../services/taskService");
 
 const postCreateTask = async (req, res) => {
-  let result = await postCreateTaskService(req.body);
+  const result = await postCreateTaskService(req.body, req.user.userId);
+  if (result.EC !== undefined && result.EC !== 0) {
+    return res
+      .status(result.statusCode)
+      .json({ EC: result.EC, message: result.message });
+  }
   return res.status(200).json({
     EC: 0,
     data: result,
@@ -22,7 +27,15 @@ const getAllTasks = async (req, res) => {
 };
 
 const deleteTask = async (req, res) => {
-  let result = await deleteTaskService(req.body);
+  const result = await deleteTaskService(req.body, req.user.userId);
+
+  if (result.EC !== undefined && result.EC !== 0) {
+    return res.status(result.statusCode).json({
+      EC: result.EC,
+      message: result.message,
+    });
+  }
+
   return res.status(200).json({
     EC: 0,
     data: result,

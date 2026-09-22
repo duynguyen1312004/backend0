@@ -132,7 +132,12 @@ const getCreateTaskPage = async (req, res) => {
   try {
     const projectId = req.params.id;
     const project = await Project.findById(projectId).populate("usersInfor");
-
+    if (!project) {
+      return res.status(404).send("Project not found");
+    } // Kiểm tra người đang đăng nhập có phải Creator không
+    if (project.createdBy.toString() !== req.user.userId.toString()) {
+      return res.status(403).send("You do not have permission to create task");
+    }
     return res.render("create-task.ejs", {
       projectId: project._id,
       users: project.usersInfor,

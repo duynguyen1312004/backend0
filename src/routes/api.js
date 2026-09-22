@@ -1,6 +1,13 @@
 const express = require("express");
 const routerAPI = express.Router();
 
+const validationMiddleware = require("../middlewares/validationMiddleware");
+
+const {
+  createProjectSchema,
+  addUsersToProjectSchema,
+} = require("../validations/project.validation");
+
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
 const {
@@ -53,8 +60,12 @@ routerAPI.get("/profile", authMiddleware, getProfile);
 routerAPI.get("/users", authMiddleware, roleMiddleware("ADMIN"), getUsersAPI);
 routerAPI.post("/users", postCreateUserAPI);
 routerAPI.put("/users", putUpdateUserAPI);
-routerAPI.delete("/users", deleteUserAPI);
-
+routerAPI.delete(
+  "/users",
+  authMiddleware,
+  roleMiddleware("ADMIN"),
+  deleteUserAPI,
+);
 // ==================== CUSTOMERS ====================
 
 routerAPI.post("/customers", postCreateCustomer);
@@ -69,7 +80,15 @@ routerAPI.delete("/customers-many", deleteArrayCustomers);
 
 // ==================== PROJECTS ====================
 
-routerAPI.post("/projects", authMiddleware, postCreateProject);
+routerAPI.post(
+  "/projects",
+  authMiddleware,
+  validationMiddleware({
+    create: createProjectSchema,
+    addUsers: addUsersToProjectSchema,
+  }),
+  postCreateProject,
+);
 routerAPI.get("/projects", authMiddleware, getAllProject);
 
 routerAPI.put("/projects", authMiddleware, putUpdateProject);

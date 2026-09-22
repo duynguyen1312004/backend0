@@ -30,6 +30,7 @@ const {
 } = require("../controllers/authController");
 
 const { postCreateTask } = require("../controllers/taskController");
+const roleMiddleware = require("../middlewares/roleMiddleware");
 
 // ==================== HOME ====================
 
@@ -38,13 +39,34 @@ router.get("/abc", getABC);
 
 // ==================== USER ====================
 
-router.get("/create", getCreatePage);
-router.post("/create-user", postCreateUser);
+router.get("/create", authMiddleware, roleMiddleware("ADMIN"), getCreatePage);
 
-router.get("/update/:id", getUpdatePage);
-router.post("/update-user", postUpdateUser);
+router.post(
+  "/create-user",
+  authMiddleware,
+  roleMiddleware("ADMIN"),
+  postCreateUser,
+);
 
-router.post("/delete-user/:id", getDeleteUserPage);
+router.get(
+  "/update/:id",
+  authMiddleware,
+  roleMiddleware("ADMIN"),
+  getUpdatePage,
+);
+router.post(
+  "/update-user",
+  authMiddleware,
+  roleMiddleware("ADMIN"),
+  postUpdateUser,
+);
+
+router.post(
+  "/delete-user/:id",
+  authMiddleware,
+  roleMiddleware("ADMIN"),
+  getDeleteUserPage,
+);
 router.post("/delete-user", postRemoveUser);
 
 // ==================== AUTH ====================
@@ -60,7 +82,8 @@ router.get("/projects/:id", getProjectDetailPage);
 
 // ==================== TASK ====================
 
-router.get("/projects/:id/tasks/create", getCreateTaskPage);
-router.post("/projects/:id/tasks/create", postCreateTask);
+router.get("/projects/:id/tasks/create", authMiddleware, getCreateTaskPage);
+
+router.post("/projects/:id/tasks/create", authMiddleware, postCreateTask);
 
 module.exports = router;
