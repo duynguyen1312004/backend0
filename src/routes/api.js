@@ -7,6 +7,11 @@ const {
   createProjectSchema,
   addUsersToProjectSchema,
 } = require("../validations/project.validation");
+const {
+  createTaskSchema,
+  updateTaskSchema,
+  deleteTaskSchema,
+} = require("../validations/task.validation");
 
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
@@ -96,11 +101,28 @@ routerAPI.delete("/projects", authMiddleware, deleteProject);
 
 // ==================== TASKS ====================
 
-routerAPI.post("/tasks", authMiddleware, postCreateTask);
+routerAPI.post(
+  "/tasks",
+  authMiddleware,
+  validationMiddleware(createTaskSchema),
+  postCreateTask,
+);
+
 routerAPI.get("/tasks", authMiddleware, getAllTasks);
 
-routerAPI.put("/tasks", authMiddleware, updateTask);
-routerAPI.delete("/tasks", authMiddleware, deleteTask);
+routerAPI.put(
+  "/tasks",
+  authMiddleware,
+  validationMiddleware(updateTaskSchema),
+  updateTask,
+);
+
+routerAPI.delete(
+  "/tasks",
+  authMiddleware,
+  validationMiddleware(deleteTaskSchema),
+  deleteTask,
+);
 
 // ==================== FILE UPLOAD ====================
 
