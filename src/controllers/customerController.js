@@ -110,7 +110,7 @@ module.exports = {
     });
   },
   deleteACustomer: async (req, res) => {
-    let customerId = req.body.id;
+    let customerId = req.body.customerId;
 
     const result = await deleteACustomerService(customerId);
     return res.status(200).json({

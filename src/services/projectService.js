@@ -3,19 +3,46 @@ const aqp = require("api-query-params");
 const Task = require("../models/task");
 
 const createProjectService = async (data, userId) => {
-  if (data.type === "EMPTY-PROJECT") {
-    let result = await Project.create({
+  try {
+    const result = await Project.create({
       ...data,
       createdBy: userId,
     });
 
     return result;
-  }
+  } catch (error) {
+    console.log("error:", error);
 
-  if (data.type === "ADD-USERS") {
-    console.log("PROJECT ID RECEIVED:", data.projectId);
-    console.log("TYPE RECEIVED:", data.type);
-    let result = await Project.updateOne(
+    return {
+      EC: -1,
+      statusCode: 500,
+      message: "Internal server error",
+    };
+  }
+};
+const addUsersToProjectService = async (data, userId) => {
+  try {
+    const project = await Project.findById(data.projectId);
+
+    if (!project) {
+      return {
+        EC: -1,
+        statusCode: 404,
+        message: "Project not found",
+      };
+    }
+
+    const isCreator = project.createdBy.toString() === userId.toString();
+
+    if (!isCreator) {
+      return {
+        EC: -1,
+        statusCode: 403,
+        message: "You do not have permission to add users",
+      };
+    }
+
+    const result = await Project.updateOne(
       { _id: data.projectId },
       {
         $addToSet: {
@@ -25,18 +52,18 @@ const createProjectService = async (data, userId) => {
         },
       },
     );
-    console.log("ADD USERS RESULT:", result);
-
-    let project = await Project.findById(data.projectId);
-
-    console.log("PROJECT AFTER UPDATE:", project);
 
     return result;
+  } catch (error) {
+    console.log("error:", error);
+
+    return {
+      EC: -1,
+      statusCode: 500,
+      message: "Internal server error",
+    };
   }
-
-  return null;
 };
-
 const getProjectService = async (data) => {
   let filter = {};
   let limit = Number(data.limit);
@@ -157,4 +184,5 @@ module.exports = {
   getProjectService,
   deleteProjectService,
   putUpdateProjectService,
+  addUsersToProjectService,
 };

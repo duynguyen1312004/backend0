@@ -3,10 +3,26 @@ const {
   getProjectService,
   deleteProjectService,
   putUpdateProjectService,
+  addUsersToProjectService,
 } = require("../services/projectService");
 
 const postCreateProject = async (req, res) => {
   let result = await createProjectService(req.body, req.user.userId);
+  return res.status(200).json({
+    EC: 0,
+    data: result,
+  });
+};
+const postAddUsersToProject = async (req, res) => {
+  const result = await addUsersToProjectService(req.body, req.user.userId);
+
+  if (result.EC !== undefined && result.EC !== 0) {
+    return res.status(result.statusCode).json({
+      EC: result.EC,
+      message: result.message,
+    });
+  }
+
   return res.status(200).json({
     EC: 0,
     data: result,
@@ -77,4 +93,5 @@ module.exports = {
   postCreateProject,
   getAllProject,
   putUpdateProject,
+  postAddUsersToProject,
 };

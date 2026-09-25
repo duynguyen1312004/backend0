@@ -2,7 +2,11 @@ const express = require("express");
 const routerAPI = express.Router();
 
 const validationMiddleware = require("../middlewares/validationMiddleware");
-
+const {
+  createCustomerSchema,
+  updateCustomerSchema,
+  deleteCustomerSchema,
+} = require("../validations/customer.validation");
 const {
   createProjectSchema,
   addUsersToProjectSchema,
@@ -38,6 +42,7 @@ const {
   getAllProject,
   deleteProject,
   putUpdateProject,
+  postAddUsersToProject,
 } = require("../controllers/projectController");
 
 const {
@@ -73,14 +78,30 @@ routerAPI.delete(
 );
 // ==================== CUSTOMERS ====================
 
-routerAPI.post("/customers", postCreateCustomer);
+// routerAPI.post("/customers", postCreateCustomer);
 routerAPI.post("/customers-many", postCreateArrayCustomer);
 
 routerAPI.get("/customers", getAllCustomers);
 
-routerAPI.put("/customers", putUpdateCustomers);
+// routerAPI.put("/customers", putUpdateCustomers);
 
-routerAPI.delete("/customers", deleteACustomer);
+routerAPI.post(
+  "/customers",
+  validationMiddleware(createCustomerSchema),
+  postCreateCustomer,
+);
+
+routerAPI.put(
+  "/customers",
+  validationMiddleware(updateCustomerSchema),
+  putUpdateCustomers,
+);
+
+routerAPI.delete(
+  "/customers",
+  validationMiddleware(deleteCustomerSchema),
+  deleteACustomer,
+);
 routerAPI.delete("/customers-many", deleteArrayCustomers);
 
 // ==================== PROJECTS ====================
@@ -93,6 +114,12 @@ routerAPI.post(
     addUsers: addUsersToProjectSchema,
   }),
   postCreateProject,
+);
+routerAPI.post(
+  "/projects/users",
+  authMiddleware,
+  validationMiddleware(addUsersToProjectSchema),
+  postAddUsersToProject,
 );
 routerAPI.get("/projects", authMiddleware, getAllProject);
 
