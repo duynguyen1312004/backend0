@@ -2,8 +2,10 @@ const Task = require("../models/task");
 const Project = require("../models/project");
 
 const postCreateTaskService = async (data, userId) => {
+  console.log("SERVICE projectId:", data.projectId);
   // Tìm project
   const project = await Project.findById(data.projectId);
+  console.log("FOUND PROJECT:", project);
 
   if (!project) {
     return {
@@ -186,9 +188,20 @@ const putUpdateTaskService = async (taskId, data, userId) => {
 
   return result;
 };
+
+const getMyTasksService = async (userId) => {
+  const tasks = await Task.find({
+    assignedTo: userId,
+  })
+    .populate("assignedTo", "name email")
+    .populate("projectId", "name");
+
+  return tasks;
+};
 module.exports = {
   putUpdateTaskService,
   postCreateTaskService,
   getTaskService,
   deleteTaskService,
+  getMyTasksService,
 };

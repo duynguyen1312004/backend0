@@ -1,146 +1,484 @@
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Projects - TaskFlow</title>
+<head>
 
-    <link rel="stylesheet" href="/css/projects.css" />
-  </head>
+  <meta charset="UTF-8">
 
-  <body>
-    <div class="app-layout">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="brand">
-          <div class="brand-icon">✓</div>
-          <span>TaskFlow</span>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Projects - TaskFlow</title>
+
+  <link
+    rel="stylesheet"
+    href="/css/projects.css"
+  >
+
+</head>
+
+
+<body>
+
+  <div class="app-layout">
+
+
+    <!-- =====================================
+         SIDEBAR
+    ====================================== -->
+
+    <aside class="sidebar">
+
+      <!-- BRAND -->
+      <div class="brand">
+
+        <div class="brand-icon">
+          ✓
         </div>
 
-        <nav class="sidebar-nav">
-          <a href="/" class="nav-item">
-            <span class="nav-icon">⌂</span>
-            Dashboard
-          </a>
+        <span>
+          TaskFlow
+        </span>
 
-          <a href="/projects" class="nav-item active">
-            <span class="nav-icon">▦</span>
-            Projects
-          </a>
+      </div>
+
+
+      <!-- NAVIGATION -->
+      <nav class="sidebar-nav">
+
+        <a
+          href="/"
+          class="nav-item"
+        >
+          <span class="nav-icon">
+            ⌂
+          </span>
+
+          Dashboard
+        </a>
+
+
+        <a
+          href="/projects"
+          class="nav-item active"
+        >
+          <span class="nav-icon">
+            ▦
+          </span>
+
+          Projects
+        </a>
+
+
+        <!-- <a
+          href="#"
+          class="nav-item"
+        >
+          <span class="nav-icon">
+            ☑
+          </span>
+
+          My Tasks
+        </a>
+
+
+        <a
+          href="#"
+          class="nav-item"
+        >
+          <span class="nav-icon">
+            ♧
+          </span>
+
+          Team
+        </a> -->
+
+
+
+        <% if (currentUser && currentUser.role === "ADMIN") { %>
 
           <a href="/create" class="nav-item">
-            <span class="nav-icon">＋</span>
+
+            <span class="nav-icon">
+              ＋
+            </span>
+
             Create User
-          </a>
-        </nav>
 
-        <div class="sidebar-bottom">
-          <a href="/" class="back-link">
-            ← Back to Dashboard
           </a>
+
+        <% } %>
+
+      </nav>
+
+
+      <!-- SIDEBAR BOTTOM -->
+      <div class="sidebar-bottom">
+
+        <a
+          href="/"
+          class="back-link"
+        >
+          ← Back to Dashboard
+        </a>
+
+
+        <!-- LOGOUT -->
+        <form
+          action="/logout"
+          method="POST"
+          class="logout-form"
+          onsubmit="return confirm('Are you sure you want to log out?')"
+        >
+
+          <button
+            type="submit"
+            class="logout-button"
+          >
+
+            <span class="logout-icon">
+              ↪
+            </span>
+
+            Log out
+
+          </button>
+
+        </form>
+
+      </div>
+
+    </aside>
+
+
+
+    <!-- =====================================
+         MAIN CONTENT
+    ====================================== -->
+
+    <main class="main-content">
+
+
+      <!-- PAGE HEADER -->
+      <header class="page-header">
+
+
+        <!-- TITLE -->
+        <div>
+
+          <p class="page-label">
+            WORKSPACE
+          </p>
+
+          <h1>
+            Projects
+          </h1>
+
+          <p class="page-description">
+            Manage and track all your projects in one place.
+          </p>
+
         </div>
-      </aside>
 
-      <!-- Main Content -->
-      <main class="main-content">
-        <header class="page-header">
-          <div>
-            <p class="page-label">WORKSPACE</p>
-            <h1>Projects</h1>
-            <p class="page-description">
-              Manage and track all your projects in one place.
-            </p>
-          </div>
 
-          <a href="/" class="dashboard-btn">
+        <!-- HEADER ACTIONS -->
+        <div class="page-header-actions">
+
+
+          <!-- DASHBOARD -->
+          <a
+            href="/"
+            class="dashboard-btn"
+          >
             ← Dashboard
           </a>
-        </header>
 
-        <!-- Project Summary -->
-        <section class="summary-card">
-          <div class="summary-icon">▦</div>
+
+          <!-- CREATE PROJECT -->
+          <a
+            href="/projects/create"
+            class="create-project-btn"
+          >
+
+            <span class="create-icon">
+              ＋
+            </span>
+
+            Create Project
+
+          </a>
+
+        </div>
+
+      </header>
+
+
+
+      <!-- =====================================
+           PROJECT SUMMARY
+      ====================================== -->
+
+      <section class="summary-card">
+
+
+        <div class="summary-icon">
+          ▦
+        </div>
+
+
+        <div>
+
+          <p class="summary-title">
+            Total Projects
+          </p>
+
+          <h2>
+            <%= listProjects.length %>
+          </h2>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================
+           PROJECTS SECTION
+      ====================================== -->
+
+      <section class="projects-section">
+
+
+        <!-- SECTION HEADER -->
+        <div class="section-heading">
+
 
           <div>
-            <p class="summary-title">Total Projects</p>
-            <h2><%= listProjects.length %></h2>
-          </div>
-        </section>
 
-        <!-- Projects -->
-        <section class="projects-section">
-          <div class="section-heading">
-            <h2>All Projects</h2>
+            <h2>
+              All Projects
+            </h2>
+
+            <p>
+              View and manage your workspace projects.
+            </p>
+
+          </div>
+
+
+          <div class="section-heading-right">
+
             <span class="project-count">
-              <%= listProjects.length %> projects
+              <%= listProjects.length %>
+              <%= listProjects.length === 1 ? "project" : "projects" %>
             </span>
+
           </div>
 
-          <% if (listProjects.length === 0) { %>
-            <div class="empty-state">
-              <div class="empty-icon">▦</div>
-              <h3>No projects yet</h3>
-              <p>
-                Your projects will appear here when you create them.
-              </p>
 
-              <a href="/" class="empty-btn">
-                Back to Dashboard
-              </a>
+        </div>
+
+
+
+        <!-- =====================================
+             EMPTY STATE
+        ====================================== -->
+
+        <% if (listProjects.length === 0) { %>
+
+
+          <div class="empty-state">
+
+
+            <div class="empty-icon">
+              ▦
             </div>
-          <% } else { %>
-            <div class="project-grid">
-              <% listProjects.forEach((project) => { %>
-                <article class="project-card">
-                  <div class="project-card-top">
-                    <span class="project-badge">
-                      Project
+
+
+            <h3>
+              No projects yet
+            </h3>
+
+
+            <p>
+              Start by creating your first project
+              and keep everything organized in one place.
+            </p>
+
+
+            <a
+              href="/projects/create"
+              class="empty-btn"
+            >
+
+              <span>
+                ＋
+              </span>
+
+              Create Your First Project
+
+            </a>
+
+
+          </div>
+
+
+        <% } else { %>
+
+
+
+          <!-- =====================================
+               PROJECT GRID
+          ====================================== -->
+
+          <div class="project-grid">
+
+
+            <% listProjects.forEach((project) => { %>
+
+
+              <article class="project-card">
+
+
+                <!-- CARD TOP -->
+                <div class="project-card-top">
+
+
+                  <span class="project-badge">
+                    Project
+                  </span>
+
+
+                </div>
+
+
+
+                <!-- PROJECT CONTENT -->
+                <div class="project-content">
+
+                  <h3>
+                    <%= project.name %>
+                  </h3>
+
+                  <p class="project-description">
+
+                    <%= project.description ||
+                      "No description available." %>
+
+                  </p>
+
+                  <!-- MEMBER & TASK COUNT -->
+                  <div class="project-meta">
+
+                    <span>
+                      👥
+                      <%= project.usersInfor ? project.usersInfor.length : 0 %>
+                      Members
                     </span>
 
-                    <button class="more-btn" type="button">
-                      ⋯
-                    </button>
+                    <span>
+                      ✓
+                      <%= project.tasks ? project.tasks.length : 0 %>
+                      Tasks
+                    </span>
+
                   </div>
 
-                  <div class="project-content">
-                    <h3>
-                      <%= project.name %>
-                    </h3>
+                </div>
 
-                    <p class="project-description">
-                      <%= project.description || "No description available." %>
-                    </p>
+
+
+                <!-- PROJECT DATES -->
+                <div class="project-dates">
+
+
+                  <div class="date-item">
+
+                    <span class="date-label">
+                      Start date
+                    </span>
+
+                    <span class="date-value">
+                      <%= project.startDate || "Not set" %>
+                    </span>
+
                   </div>
 
-                  <div class="project-dates">
-                    <div class="date-item">
-                      <span class="date-label">Start date</span>
-                      <span class="date-value">
-                        <%= project.startDate || "Not set" %>
-                      </span>
-                    </div>
 
-                    <div class="date-item">
-                      <span class="date-label">End date</span>
-                      <span class="date-value">
-                        <%= project.endDate || "Not set" %>
-                      </span>
-                    </div>
+                  <div class="date-item">
+
+                    <span class="date-label">
+                      End date
+                    </span>
+
+                    <span class="date-value">
+                      <%= project.endDate || "Not set" %>
+                    </span>
+
                   </div>
 
-                  <div class="project-footer">
-                    <a href="/projects/<%= project._id %>">
-                      View Project
-                      <span>→</span>
-                    </a>
-                  </div>
-                </article>
-              <% }) %>
-            </div>
-          <% } %>
-        </section>
-      </main>
-    </div>
-  </body>
+
+                </div>
+
+
+
+                <!-- PROJECT FOOTER -->
+                <div class="project-footer">
+
+
+                  <a
+                    href="/projects/<%= project._id %>"
+                  >
+
+                    View Project
+
+                    <span>
+                      →
+                    </span>
+
+                  </a>
+
+
+                </div>
+
+
+              </article>
+
+
+            <% }) %>
+
+
+          </div>
+
+
+        <% } %>
+
+
+      </section>
+
+
+
+      <!-- =====================================
+           FOOTER
+      ====================================== -->
+
+      <footer class="projects-footer">
+
+        © 2026 TaskFlow.
+        Built for better productivity.
+
+      </footer>
+
+
+    </main>
+
+
+  </div>
+
+
+</body>
+
 </html>

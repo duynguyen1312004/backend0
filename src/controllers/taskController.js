@@ -3,6 +3,7 @@ const {
   getTaskService,
   deleteTaskService,
   putUpdateTaskService,
+  getMyTasksService,
 } = require("../services/taskService");
 
 const postCreateTask = async (req, res) => {
@@ -67,4 +68,19 @@ const updateTask = async (req, res) => {
   });
 };
 
-module.exports = { postCreateTask, getAllTasks, deleteTask, updateTask };
+const getMyTasks = async (req, res) => {
+  const result = await getMyTasksService(req.user.userId);
+
+  return res.status(200).json({
+    EC: 0,
+    data: result,
+  });
+};
+
+module.exports = {
+  postCreateTask,
+  getAllTasks,
+  deleteTask,
+  updateTask,
+  getMyTasks,
+};

@@ -51,6 +51,7 @@ const {
   getAllTasks,
   deleteTask,
   updateTask,
+  getMyTasks,
 } = require("../controllers/taskController");
 
 const {
@@ -161,6 +162,8 @@ routerAPI.delete(
   validationMiddleware(deleteTaskSchema),
   deleteTask,
 );
+
+routerAPI.get("/tasks/my-tasks", authMiddleware, getMyTasks);
 
 // ==================== FILE UPLOAD ====================
 

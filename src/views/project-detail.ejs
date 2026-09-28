@@ -102,15 +102,15 @@
 
           <div class="info-grid">
             <div class="info-card">
-              <div class="info-icon">▣</div>
+              <div class="info-icon">♙</div>
 
               <div>
                 <span class="info-label">
-                  Project ID
+                  Members
                 </span>
 
                 <strong>
-                  <%= project.id || "N/A" %>
+                  <%= project.usersInfor ? project.usersInfor.length : 0 %>
                 </strong>
               </div>
             </div>
@@ -215,61 +215,119 @@
 
 
         <!-- Members -->
+
+        
         <section class="content-section">
-          <div class="section-heading">
-            <h2>Members</h2>
 
-            <span class="section-count">
-              <%= project.usersInfor
-                ? project.usersInfor.length
-                : 0 %>
-              members
-            </span>
-          </div>
+            <div class="section-heading">
 
-          <% if (
-            project.usersInfor &&
-            project.usersInfor.length > 0
-          ) { %>
+                <h2>Members</h2>
 
-            <div class="members-grid">
-              <% project.usersInfor.forEach((user) => { %>
+                <span class="section-count">
+                    <%= project.usersInfor ? project.usersInfor.length : 0 %>
+                    members
+                </span>
 
-                <div class="member-card">
-                  <div class="member-avatar">
-                    <%= user.name
-                      ? user.name.charAt(0).toUpperCase()
-                      : "U" %>
-                  </div>
+            </div>
 
-                  <div class="member-info">
-                    <h3>
-                      <%= user.name || "Unknown User" %>
-                    </h3>
 
-                    <p>
-                      <%= user.email || "No email available" %>
-                    </p>
-                  </div>
+            <!-- Member List -->
+            <% if (project.usersInfor && project.usersInfor.length > 0) { %>
+
+                <div class="members-grid">
+
+                    <% project.usersInfor.forEach((user) => { %>
+
+                        <div class="member-card">
+
+                            <div class="member-avatar">
+                                <%= user.name
+                                    ? user.name.charAt(0).toUpperCase()
+                                    : "U" %>
+                            </div>
+
+                            <div class="member-info">
+
+                                <h3>
+                                    <%= user.name || "Unknown User" %>
+                                </h3>
+
+                                <p>
+                                    <%= user.email || "No email available" %>
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    <% }) %>
+
                 </div>
 
-              <% }) %>
-            </div>
+            <% } else { %>
 
-          <% } else { %>
+                <div class="empty-card">
 
-            <div class="empty-card">
-              <div class="empty-icon">♙</div>
+                    <div class="empty-icon">♙</div>
 
-              <h3>No members</h3>
+                    <h3>No members</h3>
 
-              <p>
-                This project does not have any members yet.
-              </p>
-            </div>
+                    <p>
+                        This project does not have any members yet.
+                    </p>
 
-          <% } %>
+                </div>
+
+            <% } %>
+
+
+            <!-- Add Member -->
+            <% if (
+                currentUser &&
+                project.createdBy &&
+                currentUser._id.toString() === project.createdBy._id.toString()
+            ) { %>
+
+                <div class="add-member-box">
+
+                    <h3>Add Member</h3>
+
+                    <form
+                        action="/projects/<%= project._id %>/add-member"
+                        method="POST"
+                    >
+                        <label>Select Member</label>
+
+                        <select name="userId" required>
+
+                            <option value="">
+                                -- Select a member --
+                            </option>
+
+                            <% users.forEach((user) => { %>
+
+                                <option value="<%= user._id %>">
+                                    <%= user.name %> - <%= user.email %>
+                                </option>
+
+                            <% }) %>
+
+                        </select>
+
+                        <button type="submit">
+                            + Add Member
+                        </button>
+
+                    </form>
+
+                </div>
+
+            <% } %>
+
         </section>
+        
+        
+
 
 
         <!-- Tasks -->
@@ -295,6 +353,7 @@
                 <thead>
                   <tr>
                     <th>Task Name</th>
+                    <th>Assigned To</th>
                     <th>Status</th>
                     <th>End Date</th>
                   </tr>
@@ -303,17 +362,32 @@
                 <tbody>
                   <% project.tasks.forEach((task) => { %>
 
+
                     <tr>
+
+                      <!-- TASK NAME -->
                       <td>
                         <div class="task-name">
+
                           <span class="task-icon">✓</span>
 
                           <strong>
                             <%= task.name || "Unnamed Task" %>
                           </strong>
+
                         </div>
                       </td>
 
+
+                      <!-- ASSIGNED TO -->
+                      <td>
+                        <%= task.assignedTo
+                          ? task.assignedTo.name
+                          : "Unassigned" %>
+                      </td>
+
+
+                      <!-- STATUS -->
                       <td>
                         <%
                           const taskStatus =
@@ -326,10 +400,12 @@
                             taskStatus.toLowerCase() === "completed"
                           ) {
                             statusClass = "status-completed";
+
                           } else if (
-                            taskStatus.toLowerCase() === "in progress"
+                            taskStatus.toLowerCase() === "in_progress"
                           ) {
                             statusClass = "status-progress";
+
                           } else if (
                             taskStatus.toLowerCase() === "pending" ||
                             taskStatus.toLowerCase() === "todo"
@@ -343,12 +419,16 @@
                         </span>
                       </td>
 
+
+                      <!-- END DATE -->
                       <td>
                         <span class="task-date">
                           <%= task.endDate || "N/A" %>
                         </span>
                       </td>
+
                     </tr>
+
 
                   <% }) %>
                 </tbody>
@@ -370,18 +450,30 @@
           <% } %>
         </section>
         <!-- Bottom Actions -->
-        <div class="page-actions">
-            <a href="/projects" class="btn btn-secondary">
-                ← Back to Projects
-            </a>
 
-            <a 
-                href="/projects/<%= project._id %>/tasks/create" 
-                class="btn btn-primary"
-            >
-                + Create Task
-            </a>
-        </div>
+        <div class="page-actions">
+
+          <a href="/projects" class="btn btn-secondary">
+              ← Back to Projects
+          </a>
+
+
+          <% if (
+              currentUser &&
+              project.createdBy &&
+              currentUser._id.toString() === project.createdBy._id.toString()
+          ) { %>
+
+              <a
+                  href="/projects/<%= project._id %>/tasks/create"
+                  class="btn btn-primary"
+              >
+                  + Create Task
+              </a>
+
+          <% } %>
+
+      </div>
 
       </main>
     </div>

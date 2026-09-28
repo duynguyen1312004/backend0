@@ -30,6 +30,12 @@ const postLogin = async (req, res) => {
   return res.redirect("/");
 };
 
+const postLogout = (req, res) => {
+  res.clearCookie("access_token");
+
+  return res.redirect("/login");
+};
+
 const postRegister = async (req, res) => {
   const schema = Joi.object({
     name: Joi.string().alphanum().min(3).max(30).required(),
@@ -92,4 +98,5 @@ module.exports = {
   getLoginPage,
   getRegisterPage,
   postRegister,
+  postLogout,
 };

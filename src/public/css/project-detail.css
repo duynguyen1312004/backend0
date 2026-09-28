@@ -440,3 +440,56 @@ body {
     grid-template-columns: 1fr;
   }
 }
+.add-member-box {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.add-member-box h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+
+.add-member-box form {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.add-member-box form > div {
+  flex: 1;
+}
+
+.add-member-box label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.add-member-box input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.add-member-box button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-member-box button:hover {
+  background: #1d4ed8;
+}

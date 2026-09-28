@@ -1,16 +1,12 @@
-// const connection = require("../config/database");
-// const {
-//   getAllUsers,
-//   getUserById,
-//   updateUserById,
-//   createUser,
-//   deleteUserById,
-// } = require("../services/CRUDService");
 const User = require("../models/user");
 
 const Project = require("../models/project");
 const Task = require("../models/task");
 
+const {
+  createProjectService,
+  addUsersToProjectService,
+} = require("../services/projectService");
 const { postCreateTaskService } = require("../services/taskService");
 
 const getHomePage = async (req, res) => {
@@ -24,6 +20,30 @@ const getHomePage = async (req, res) => {
     listTasks: tasks,
     currentUser: currentUser,
   });
+};
+
+const postAddMember = async (req, res) => {
+  try {
+    const projectId = req.params.id;
+    const userId = req.body.userId;
+
+    const data = {
+      type: "ADD-USERS",
+      projectId: projectId,
+      usersArr: [userId],
+    };
+
+    const result = await addUsersToProjectService(data, req.user.userId);
+
+    if (result.EC !== undefined && result.EC !== 0) {
+      return res.status(result.statusCode || 400).send(result.message);
+    }
+
+    return res.redirect(`/projects/${projectId}`);
+  } catch (error) {
+    console.log("error:", error);
+    return res.status(500).send("Server error");
+  }
 };
 
 const postCreateUser = async (req, res) => {
@@ -88,13 +108,55 @@ const postRemoveUser = async (req, res) => {
 
   res.redirect("/"); //tro ve trang chu
 };
+const getCreateProjectPage = async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.user.userId);
+
+    return res.render("create-project.ejs", {
+      currentUser: currentUser,
+    });
+  } catch (error) {
+    console.log("error:", error);
+    return res.status(500).send("Server error");
+  }
+};
+const postCreateProjectPage = async (req, res) => {
+  try {
+    const data = {
+      type: req.body.type,
+      name: req.body.name,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
+      description: req.body.description,
+      customerInfor: {
+        name: req.body.customerName,
+        phone: req.body.customerPhone,
+        email: req.body.customerEmail,
+      },
+      leader: { name: req.body.leaderName, email: req.body.leaderEmail },
+    };
+    const result = await createProjectService(data, req.user.userId);
+    if (result.EC !== undefined && result.EC !== 0) {
+      return res.status(result.statusCode || 400).send(result.message);
+    }
+    return res.redirect("/projects");
+  } catch (error) {
+    console.log("error:", error);
+    return res.status(500).send("Server error");
+  }
+};
 
 const getProjectPage = async (req, res) => {
   try {
-    let projects = await Project.find({});
+    const projects = await Project.find({})
+      .populate("usersInfor")
+      .populate("tasks");
+
+    const currentUser = await User.findById(req.user.userId);
 
     return res.render("projects.ejs", {
       listProjects: projects,
+      currentUser: currentUser,
     });
   } catch (error) {
     console.log("error:", error);
@@ -108,14 +170,26 @@ const getProjectDetailPage = async (req, res) => {
     const project = await Project.findById(projectId)
       .populate("createdBy")
       .populate("usersInfor")
-      .populate("tasks");
+      .populate({
+        path: "tasks",
+        populate: {
+          path: "assignedTo",
+          select: "name email",
+        },
+      });
 
     if (!project) {
       return res.status(404).send("Project not found");
     }
 
+    const currentUser = await User.findById(req.user.userId);
+
+    const users = await User.find({});
+
     return res.render("project-detail.ejs", {
-      project: project,
+      project,
+      currentUser,
+      users,
     });
   } catch (error) {
     console.log("error:", error);
@@ -127,13 +201,17 @@ const getProjectDetailPage = async (req, res) => {
 const getCreateTaskPage = async (req, res) => {
   try {
     const projectId = req.params.id;
+
     const project = await Project.findById(projectId).populate("usersInfor");
+
     if (!project) {
       return res.status(404).send("Project not found");
-    } // Kiểm tra người đang đăng nhập có phải Creator không
+    }
+
     if (project.createdBy.toString() !== req.user.userId.toString()) {
       return res.status(403).send("You do not have permission to create task");
     }
+
     return res.render("create-task.ejs", {
       projectId: project._id,
       users: project.usersInfor,
@@ -143,10 +221,13 @@ const getCreateTaskPage = async (req, res) => {
     return res.status(500).send("Server error");
   }
 };
-
 const postCreateTaskPage = async (req, res) => {
   try {
+    console.log("PARAMS:", req.params);
+    console.log("BODY:", req.body);
+
     const projectId = req.params.id;
+    console.log("PROJECT ID:", projectId);
 
     const data = {
       name: req.body.name,
@@ -158,7 +239,11 @@ const postCreateTaskPage = async (req, res) => {
       projectId: projectId,
     };
 
-    await postCreateTaskService(data, req.user.userId);
+    const result = await postCreateTaskService(data, req.user.userId);
+
+    if (result.EC !== undefined && result.EC !== 0) {
+      return res.status(result.statusCode || 400).send(result.message);
+    }
 
     return res.redirect(`/projects/${projectId}`);
   } catch (error) {
@@ -179,4 +264,7 @@ module.exports = {
   getProjectDetailPage,
   getCreateTaskPage,
   postCreateTaskPage,
+  getCreateProjectPage,
+  postCreateProjectPage,
+  postAddMember,
 };

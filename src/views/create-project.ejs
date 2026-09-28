@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Create Project - TaskFlow</title>
+
+    <link rel="stylesheet" href="/css/create-project.css" />
+  </head>
+
+  <body>
+    <div class="create-page">
+      <!-- ================= SIDEBAR ================= -->
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <a href="/" class="brand">
+            <div class="brand-icon">✓</div>
+            <span>TaskFlow</span>
+          </a>
+
+          <div class="workspace-switcher">
+            <div class="workspace-avatar">T</div>
+
+            <div class="workspace-info">
+              <strong>My Workspace</strong>
+              <span>Personal workspace</span>
+            </div>
+
+            <span class="workspace-arrow">⌄</span>
+          </div>
+
+          <nav class="sidebar-nav">
+            <p class="nav-label">WORKSPACE</p>
+
+            <a href="/" class="nav-item">
+              <span class="nav-icon">▦</span>
+              <span>Dashboard</span>
+            </a>
+
+            <a href="/projects" class="nav-item active">
+              <span class="nav-icon">▣</span>
+              <span>Projects</span>
+            </a>
+
+            <a href="#" class="nav-item">
+              <span class="nav-icon">☑</span>
+              <span>My Tasks</span>
+            </a>
+
+            <a href="#" class="nav-item">
+              <span class="nav-icon">♧</span>
+              <span>Team</span>
+            </a>
+
+            <p class="nav-label nav-label-spaced">MANAGE</p>
+
+            <a href="/create" class="nav-item">
+              <span class="nav-icon">＋</span>
+              <span>Create Users</span>
+            </a>
+          </nav>
+        </div>
+
+        <!-- Sidebar bottom -->
+        <div class="sidebar-footer">
+          <div class="sidebar-help">
+            <span class="help-icon">?</span>
+
+            <div>
+              <strong>Need help?</strong>
+              <span>We're here for you.</span>
+            </div>
+          </div>
+
+          <div class="sidebar-profile">
+            <div class="profile-avatar">
+              <%= currentUser.name.charAt(0).toUpperCase() %>
+            </div>
+
+            <div class="profile-info">
+              <h3><%= currentUser.name %></h3>
+              <p><%= currentUser.email %></p>
+            </div>
+
+            <span class="profile-more">•••</span>
+          </div>
+
+          <form
+            action="/logout"
+            method="POST"
+            class="logout-form"
+            onsubmit="return confirm('Are you sure you want to log out?');"
+          >
+            <button type="submit" class="logout-button">
+              <span class="logout-icon">↪</span>
+              <span>Log out</span>
+            </button>
+          </form>
+        </div>
+      </aside>
+
+      <!-- ================= MAIN CONTENT ================= -->
+      <main class="main-content">
+        <!-- Header -->
+        <header class="top-header">
+          <div class="header-left">
+            <a href="/projects" class="back-link"> ← Back to Projects </a>
+            <div class="page-title">
+              <h1>Projects</h1>
+              <p>Create and manage your projects.</p>
+            </div>
+          </div>
+          <div class="header-user">
+            <div class="header-avatar">
+              <%= currentUser.name.charAt(0).toUpperCase() %>
+            </div>
+            <div class="header-user-info">
+              <strong><%= currentUser.name %></strong>
+              <span><%= currentUser.email %></span>
+            </div>
+          </div>
+        </header>
+
+        <!-- ================= FORM ================= -->
+        <section class="form-container">
+          <div class="form-card">
+            <!-- Card Header -->
+            <div class="card-header">
+              <div class="card-header-icon">+</div>
+
+              <div>
+                <h2>Project details</h2>
+
+                <p>
+                  Provide the basic information needed to get your project
+                  started.
+                </p>
+              </div>
+            </div>
+
+            <form action="/projects/create" method="POST" class="project-form">
+              <!-- ================= PROJECT INFORMATION ================= -->
+              <section class="form-section">
+                <div class="section-heading">
+                  <div class="section-icon project-icon">▣</div>
+
+                  <div>
+                    <h3>Project Information</h3>
+                    <p>Basic details about your project.</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="projectName">
+                    Project Name
+                    <span>*</span>
+                  </label>
+
+                  <input
+                    type="text"
+                    id="projectName"
+                    name="name"
+                    placeholder="e.g. TaskFlow Website"
+                    required
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="startDate">
+                      Start Date
+                      <span>*</span>
+                    </label>
+
+                    <input
+                      type="date"
+                      id="startDate"
+                      name="startDate"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="endDate">
+                      End Date
+                      <span>*</span>
+                    </label>
+
+                    <input type="date" id="endDate" name="endDate" required />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="description"> Description </label>
+
+                  <textarea
+                    id="description"
+                    name="description"
+                    rows="5"
+                    placeholder="Describe the project's goals, scope, and requirements..."
+                  ></textarea>
+                </div>
+              </section>
+
+              <div class="section-divider"></div>
+
+              <!-- ================= CUSTOMER INFORMATION ================= -->
+              <section class="form-section">
+                <div class="section-heading">
+                  <div class="section-icon customer-icon">◉</div>
+
+                  <div>
+                    <h3>Customer Information</h3>
+                    <p>Contact details for the customer.</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="customerName">
+                    Customer Name
+                    <span>*</span>
+                  </label>
+
+                  <input
+                    type="text"
+                    id="customerName"
+                    name="customerName"
+                    placeholder="e.g. Nguyen Van A"
+                    required
+                    autocomplete="name"
+                  />
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="customerPhone">
+                      Phone
+                      <span>*</span>
+                    </label>
+
+                    <input
+                      type="tel"
+                      id="customerPhone"
+                      name="customerPhone"
+                      placeholder="e.g. 0901234567"
+                      required
+                      autocomplete="tel"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="customerEmail">
+                      Email
+                      <span>*</span>
+                    </label>
+
+                    <input
+                      type="email"
+                      id="customerEmail"
+                      name="customerEmail"
+                      placeholder="customer@example.com"
+                      required
+                      autocomplete="email"
+                    />
+                  </div>
+                </div>
+              </section>
+
+              <div class="section-divider"></div>
+
+              <!-- ================= LEADER INFORMATION ================= -->
+              <section class="form-section">
+                <div class="section-heading">
+                  <div class="section-icon leader-icon">♙</div>
+
+                  <div>
+                    <h3>Leader Information</h3>
+                    <p>Person responsible for managing this project.</p>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="leaderName">
+                      Leader Name
+                      <span>*</span>
+                    </label>
+
+                    <input
+                      type="text"
+                      id="leaderName"
+                      name="leaderName"
+                      placeholder="e.g. Tran Van B"
+                      required
+                      autocomplete="name"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="leaderEmail">
+                      Leader Email
+                      <span>*</span>
+                    </label>
+
+                    <input
+                      type="email"
+                      id="leaderEmail"
+                      name="leaderEmail"
+                      placeholder="leader@example.com"
+                      required
+                      autocomplete="email"
+                    />
+                  </div>
+                </div>
+              </section>
+
+              <!-- Hidden project type -->
+              <input type="hidden" name="type" value="EMPTY-PROJECT" />
+
+              <!-- ================= ACTIONS ================= -->
+              <div class="form-actions">
+                <a href="/projects" class="cancel-button"> Cancel </a>
+
+                <button type="submit" class="create-button">
+                  <span>＋</span>
+                  Create Project
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="page-footer">
+          © 2026 TaskFlow. Built for better productivity.
+        </footer>
+      </main>
+    </div>
+
+    <!-- ================= DATE VALIDATION ================= -->
+    <script>
+      const startDate = document.getElementById("startDate");
+      const endDate = document.getElementById("endDate");
+
+      startDate.addEventListener("change", function () {
+        if (!this.value) {
+          endDate.removeAttribute("min");
+          return;
+        }
+
+        endDate.min = this.value;
+
+        if (endDate.value && endDate.value < this.value) {
+          endDate.value = "";
+        }
+      });
+
+      endDate.addEventListener("change", function () {
+        if (startDate.value && this.value && this.value < startDate.value) {
+          alert("End date cannot be earlier than start date.");
+          this.value = "";
+        }
+      });
+    </script>
+  </body>
+</html>
