@@ -8,6 +8,10 @@ const createCustomerSchema = Joi.object({
     .required(),
 
   email: Joi.string().email().required(),
+
+  address: Joi.string().allow(""),
+
+  description: Joi.string().max(500).allow(""),
 });
 
 const updateCustomerSchema = Joi.object({
@@ -20,6 +24,8 @@ const updateCustomerSchema = Joi.object({
     .required(),
 
   email: Joi.string().email().required(),
+
+  address: Joi.string().allow(""),
 });
 
 const deleteCustomerSchema = Joi.object({

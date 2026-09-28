@@ -1,4 +1,5 @@
 const { uploadSingleFile } = require("../services/fileService");
+
 const {
   createCustomerService,
   createArrayCustomerService,
@@ -8,123 +9,106 @@ const {
   deleteArrayCustomersService,
 } = require("../services/customerService");
 
-const Joi = require("joi");
+const postCreateCustomer = async (req, res) => {
+  const { name, address, phone, email, description } = req.body;
 
-const aqp = require("api-query-params");
-//1 cách khác để viết API
-//{key : value}
+  let imageUrl = "";
+
+  if (req.files && req.files.image) {
+    const result = await uploadSingleFile(req.files.image);
+    imageUrl = result.path;
+  }
+
+  const customerData = {
+    name,
+    address,
+    phone,
+    email,
+    description,
+    image: imageUrl,
+  };
+
+  const customer = await createCustomerService(customerData);
+
+  return res.status(200).json({
+    EC: 0,
+    data: customer,
+  });
+};
+
+const postCreateArrayCustomer = async (req, res) => {
+  const customers = await createArrayCustomerService(req.body.customers);
+
+  return res.status(200).json({
+    EC: 0,
+    data: customers,
+  });
+};
+
+const getAllCustomers = async (req, res) => {
+  const { limit, page, name, address, phone, email, city, age } = req.query;
+
+  const result = await getAllCustomersService({
+    limit: Number(limit),
+    page: Number(page),
+    name,
+    address,
+    phone,
+    email,
+    city,
+    age,
+  });
+
+  return res.status(200).json({
+    EC: 0,
+    data: result,
+  });
+};
+
+const putUpdateCustomers = async (req, res) => {
+  const { customerId, name, email, address } = req.body;
+
+  const data = {
+    name,
+    email,
+    address,
+  };
+
+  const result = await putUpdateCustomersService(customerId, data);
+
+  return res.status(200).json({
+    EC: 0,
+    data: result,
+  });
+};
+
+const deleteACustomer = async (req, res) => {
+  const { customerId } = req.body;
+
+  const result = await deleteACustomerService(customerId);
+
+  return res.status(200).json({
+    EC: 0,
+    data: result,
+  });
+};
+
+const deleteArrayCustomers = async (req, res) => {
+  const { customerIds } = req.body;
+
+  const result = await deleteArrayCustomersService(customerIds);
+
+  return res.status(200).json({
+    EC: 0,
+    data: result,
+  });
+};
+
 module.exports = {
-  postCreateCustomer: async (req, res) => {
-    let { name, address, phone, email, description } = req.body;
-    const schema = Joi.object({
-      name: Joi.string().alphanum().min(3).max(30).required(),
-
-      address: Joi.string(),
-
-      phone: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
-
-      email: Joi.string().email({
-        minDomainSegments: 2,
-        tlds: { allow: ["com", "net"] },
-      }),
-
-      description: Joi.string(),
-    });
-    const { error } = schema.validate(req.body, { abortEarly: false });
-    // console.log("check result = ", result);
-    if (error) {
-      //return error
-    } else {
-      return res.status(200).json({
-        message: error,
-      });
-    }
-
-    let imageUrl = "";
-    //image: String
-    if (!req.files || req.files.length === 0) {
-      //   return res.status(400).json({ error: "Vui lòng chọn ít nhất một file!" });
-      //do nothing
-    } else {
-      let result = await uploadSingleFile(req.files.image);
-      imageUrl = result.path;
-    }
-    let customerData = {
-      name,
-      address,
-      phone,
-      email,
-      description,
-      image: imageUrl,
-    };
-    let customer = await createCustomerService(customerData);
-
-    return res.status(200).json({
-      EC: 0,
-      data: customer,
-    });
-  },
-  postCreateArrayCustomer: async (req, res) => {
-    let customers = await createArrayCustomerService(req.body.customers);
-    if (customers) {
-      return res.status(200).json({
-        EC: 0,
-        data: customers,
-      });
-    } else {
-      return res.status(200).json({
-        EC: -1,
-        data: customers,
-      });
-    }
-  },
-  getAllCustomers: async (req, res) => {
-    const { limit, page, name, address, phone, email, city, age } = req.query;
-    const result = await getAllCustomersService({
-      limit: Number(limit),
-      page: Number(page),
-      name,
-      address,
-      phone,
-      email,
-      city,
-      age,
-    });
-
-    return res.status(200).json({
-      EC: 0,
-      data: result,
-    });
-  },
-  putUpdateCustomers: async (req, res) => {
-    let { customerId, name, email, address } = req.body;
-    const data = {
-      name,
-      email,
-      address,
-    };
-    let result = await putUpdateCustomersService(customerId, data);
-    return res.status(200).json({
-      EC: 0,
-      data: result,
-    });
-  },
-  deleteACustomer: async (req, res) => {
-    let customerId = req.body.customerId;
-
-    const result = await deleteACustomerService(customerId);
-    return res.status(200).json({
-      EC: 0,
-      data: result,
-    });
-  },
-  deleteArrayCustomers: async (req, res) => {
-    let customerIds = req.body.customerIds;
-    let result = await deleteArrayCustomersService(customerIds);
-    console.log("check customerIds = ", customerIds);
-    return res.status(200).json({
-      EC: 0,
-      data: result,
-    });
-  },
+  postCreateCustomer,
+  postCreateArrayCustomer,
+  getAllCustomers,
+  putUpdateCustomers,
+  deleteACustomer,
+  deleteArrayCustomers,
 };

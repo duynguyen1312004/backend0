@@ -43,9 +43,6 @@ const deleteTask = async (req, res) => {
 };
 
 const updateTask = async (req, res) => {
-  console.log("=== UPDATE TASK ===");
-  console.log("req.user:", req.user);
-  console.log("requester userId:", req.user.userId);
   const { taskId, name, endDate, description, status } = req.body;
 
   const data = {

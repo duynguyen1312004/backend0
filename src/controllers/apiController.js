@@ -4,6 +4,7 @@ const {
   uploadMultipleFiles,
 } = require("../services/fileService");
 
+const { postLoginService } = require("../services/authService");
 const getUsersAPI = async (req, res) => {
   let results = await User.find({});
   return res.status(200).json({
@@ -70,7 +71,6 @@ const postUploadSingleFileAPI = async (req, res) => {
     return res.status(400).json({ error: "Vui lòng chọn ít nhất một file!" });
   }
   let result = await uploadSingleFile(req.files.image);
-  console.log(">>check result = ", result);
   return res.send("completed upload file");
 };
 
@@ -94,6 +94,23 @@ const postUploadMultipleFilesAPI = async (req, res) => {
   return res.status(200).json(result);
 };
 
+const postLoginAPI = async (req, res) => {
+  const result = await postLoginService(req.body);
+
+  if (result.EC !== 0) {
+    return res.status(401).json({
+      EC: result.EC,
+      message: result.message,
+    });
+  }
+
+  return res.status(200).json({
+    EC: 0,
+    message: "Login successfully",
+    data: result.data,
+  });
+};
+
 module.exports = {
   deleteUserAPI,
   putUpdateUserAPI,
@@ -101,4 +118,5 @@ module.exports = {
   postCreateUserAPI,
   postUploadSingleFileAPI,
   postUploadMultipleFilesAPI,
+  postLoginAPI,
 };

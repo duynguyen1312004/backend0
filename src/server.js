@@ -9,6 +9,8 @@ const fileUpload = require("express-fileupload");
 const { MongoClient } = require("mongodb");
 const cookieParser = require("cookie-parser");
 
+const errorHandler = require("./middlewares/errorHandler");
+
 require("dotenv").config();
 
 const app = express();
@@ -29,6 +31,9 @@ configViewEngine(app);
 //khai bao route
 app.use("/", webRoutes);
 app.use("/v1/api", apiRoutes);
+
+//error middleware
+app.use(errorHandler);
 
 //shape data
 

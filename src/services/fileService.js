@@ -16,8 +16,6 @@ const uploadSingleFile = async (fileObject) => {
   // Đường dẫn đầy đủ
 
   const finalPath = path.join(uploadPath, finalName);
-  console.log("uploadPath =", uploadPath);
-  console.log("finalPath =", finalPath);
   try {
     await fileObject.mv(finalPath);
 
@@ -28,7 +26,6 @@ const uploadSingleFile = async (fileObject) => {
       error: null,
     };
   } catch (err) {
-    console.log(">>check err: ", err);
     return {
       status: "failed",
       path: null,

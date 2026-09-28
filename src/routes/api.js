@@ -26,6 +26,7 @@ const {
   deleteUserAPI,
   postUploadSingleFileAPI,
   postUploadMultipleFilesAPI,
+  postLoginAPI,
 } = require("../controllers/apiController");
 
 const {
@@ -61,15 +62,28 @@ const {
 // ==================== AUTH ====================
 
 routerAPI.post("/register", postRegister);
-routerAPI.post("/login", postLogin);
+// routerAPI.post("/login", postLogin);
 
 routerAPI.get("/profile", authMiddleware, getProfile);
-
+routerAPI.post("/login", postLoginAPI);
 // ==================== USERS ====================
 
 routerAPI.get("/users", authMiddleware, roleMiddleware("ADMIN"), getUsersAPI);
-routerAPI.post("/users", postCreateUserAPI);
-routerAPI.put("/users", putUpdateUserAPI);
+
+routerAPI.post(
+  "/users",
+  authMiddleware,
+  roleMiddleware("ADMIN"),
+  postCreateUserAPI,
+);
+
+routerAPI.put(
+  "/users",
+  authMiddleware,
+  roleMiddleware("ADMIN"),
+  putUpdateUserAPI,
+);
+
 routerAPI.delete(
   "/users",
   authMiddleware,
@@ -78,41 +92,38 @@ routerAPI.delete(
 );
 // ==================== CUSTOMERS ====================
 
-// routerAPI.post("/customers", postCreateCustomer);
-routerAPI.post("/customers-many", postCreateArrayCustomer);
-
-routerAPI.get("/customers", getAllCustomers);
-
-// routerAPI.put("/customers", putUpdateCustomers);
+routerAPI.get("/customers", authMiddleware, getAllCustomers);
 
 routerAPI.post(
   "/customers",
+  authMiddleware,
   validationMiddleware(createCustomerSchema),
   postCreateCustomer,
 );
 
 routerAPI.put(
   "/customers",
+  authMiddleware,
   validationMiddleware(updateCustomerSchema),
   putUpdateCustomers,
 );
 
 routerAPI.delete(
   "/customers",
+  authMiddleware,
   validationMiddleware(deleteCustomerSchema),
   deleteACustomer,
 );
-routerAPI.delete("/customers-many", deleteArrayCustomers);
 
+routerAPI.post("/customers-many", authMiddleware, postCreateArrayCustomer);
+
+routerAPI.delete("/customers-many", authMiddleware, deleteArrayCustomers);
 // ==================== PROJECTS ====================
 
 routerAPI.post(
   "/projects",
   authMiddleware,
-  validationMiddleware({
-    create: createProjectSchema,
-    addUsers: addUsersToProjectSchema,
-  }),
+  validationMiddleware(createProjectSchema),
   postCreateProject,
 );
 routerAPI.post(
@@ -153,8 +164,9 @@ routerAPI.delete(
 
 // ==================== FILE UPLOAD ====================
 
-routerAPI.post("/file", postUploadSingleFileAPI);
-routerAPI.post("/files", postUploadMultipleFilesAPI);
+routerAPI.post("/file", authMiddleware, postUploadSingleFileAPI);
+
+routerAPI.post("/files", authMiddleware, postUploadMultipleFilesAPI);
 
 // ==================== QUERY / PARAMS NOTES ====================
 

@@ -3,67 +3,49 @@ const aqp = require("api-query-params");
 const Task = require("../models/task");
 
 const createProjectService = async (data, userId) => {
-  try {
-    const result = await Project.create({
-      ...data,
-      createdBy: userId,
-    });
+  const result = await Project.create({
+    ...data,
+    createdBy: userId,
+  });
 
-    return result;
-  } catch (error) {
-    console.log("error:", error);
+  return result;
+};
 
+const addUsersToProjectService = async (data, userId) => {
+  const project = await Project.findById(data.projectId);
+
+  if (!project) {
     return {
       EC: -1,
-      statusCode: 500,
-      message: "Internal server error",
+      statusCode: 404,
+      message: "Project not found",
     };
   }
-};
-const addUsersToProjectService = async (data, userId) => {
-  try {
-    const project = await Project.findById(data.projectId);
 
-    if (!project) {
-      return {
-        EC: -1,
-        statusCode: 404,
-        message: "Project not found",
-      };
-    }
+  const isCreator = project.createdBy.toString() === userId.toString();
 
-    const isCreator = project.createdBy.toString() === userId.toString();
+  if (!isCreator) {
+    return {
+      EC: -1,
+      statusCode: 403,
+      message: "You do not have permission to add users",
+    };
+  }
 
-    if (!isCreator) {
-      return {
-        EC: -1,
-        statusCode: 403,
-        message: "You do not have permission to add users",
-      };
-    }
-
-    const result = await Project.updateOne(
-      { _id: data.projectId },
-      {
-        $addToSet: {
-          usersInfor: {
-            $each: data.usersArr,
-          },
+  const result = await Project.updateOne(
+    { _id: data.projectId },
+    {
+      $addToSet: {
+        usersInfor: {
+          $each: data.usersArr,
         },
       },
-    );
+    },
+  );
 
-    return result;
-  } catch (error) {
-    console.log("error:", error);
-
-    return {
-      EC: -1,
-      statusCode: 500,
-      message: "Internal server error",
-    };
-  }
+  return result;
 };
+
 const getProjectService = async (data) => {
   let filter = {};
   let limit = Number(data.limit);
@@ -78,106 +60,77 @@ const getProjectService = async (data) => {
 };
 
 const deleteProjectService = async (projectId, data, userId) => {
-  try {
-    const project = await Project.findById(projectId);
+  const project = await Project.findById(projectId);
 
-    if (!project) {
-      return {
-        EC: -1,
-        statusCode: 404,
-        message: "Project not found",
-      };
-    }
-
-    // Authorization
-    if (project.createdBy.toString() !== userId.toString()) {
-      return {
-        EC: -1,
-        statusCode: 403,
-        message: "You do not have permission",
-      };
-    }
-
-    // Remove user
-    if (data.type === "REMOVE-USER") {
-      const result = await Project.updateOne(
-        { _id: projectId },
-        {
-          $pull: {
-            usersInfor: data.userId,
-          },
-        },
-      );
-
-      return result;
-    }
-
-    // Remove project
-    if (data.type === "REMOVE-PROJECT") {
-      const result = await Project.deleteById(projectId);
-
-      console.log("Delete result:", result);
-
-      return result;
-    }
-  } catch (error) {
-    console.log("error:", error);
-    return null;
+  if (!project) {
+    return {
+      EC: -1,
+      statusCode: 404,
+      message: "Project not found",
+    };
   }
-};
 
-const putUpdateProjectService = async (projectId, data, userId) => {
-  try {
-    const project = await Project.findById(projectId);
+  if (project.createdBy.toString() !== userId.toString()) {
+    return {
+      EC: -1,
+      statusCode: 403,
+      message: "You do not have permission",
+    };
+  }
 
-    if (!project) {
-      return {
-        EC: -1,
-        statusCode: 404,
-        message: "Project not found",
-      };
-    }
-
-    // Authorization
-    if (project.createdBy.toString() !== userId.toString()) {
-      return {
-        EC: -1,
-        statusCode: 403,
-        message: "You do not have permission to update this project",
-      };
-    }
-
-    // Add user
-    if (data.type === "ADD-USERS") {
-      const result = await Project.updateOne(
-        { _id: projectId },
-        {
-          $addToSet: {
-            usersInfor: data.userId,
-          },
-        },
-      );
-
-      return result;
-    }
-
-    // Update project information
+  if (data.type === "REMOVE-USER") {
     const result = await Project.updateOne(
       { _id: projectId },
       {
-        $set: {
-          name: data.name,
-          endDate: data.endDate,
-          description: data.description,
+        $pull: {
+          usersInfor: data.userId,
         },
       },
     );
 
     return result;
-  } catch (error) {
-    console.log("error:", error);
-    return null;
   }
+
+  if (data.type === "REMOVE-PROJECT") {
+    const result = await Project.deleteById(projectId);
+
+    return result;
+  }
+};
+
+const putUpdateProjectService = async (projectId, data, userId) => {
+  const project = await Project.findById(projectId);
+
+  if (!project) {
+    return {
+      EC: -1,
+      statusCode: 404,
+      message: "Project not found",
+    };
+  }
+
+  // Authorization
+  if (project.createdBy.toString() !== userId.toString()) {
+    return {
+      EC: -1,
+      statusCode: 403,
+      message: "You do not have permission to update this project",
+    };
+  }
+
+  // Update project information
+  const result = await Project.updateOne(
+    { _id: projectId },
+    {
+      $set: {
+        name: data.name,
+        endDate: data.endDate,
+        description: data.description,
+      },
+    },
+  );
+
+  return result;
 };
 module.exports = {
   createProjectService,

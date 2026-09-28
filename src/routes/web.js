@@ -35,7 +35,6 @@ const roleMiddleware = require("../middlewares/roleMiddleware");
 // ==================== HOME ====================
 
 router.get("/", authMiddleware, getHomePage);
-router.get("/abc", getABC);
 
 // ==================== USER ====================
 

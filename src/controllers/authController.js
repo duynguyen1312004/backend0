@@ -31,8 +31,6 @@ const postLogin = async (req, res) => {
 };
 
 const postRegister = async (req, res) => {
-  console.log("check data : ", req.body);
-
   const schema = Joi.object({
     name: Joi.string().alphanum().min(3).max(30).required(),
 
@@ -71,30 +69,21 @@ const postRegister = async (req, res) => {
 };
 
 const getProfile = async (req, res) => {
-  try {
-    const userId = req.user.userId;
+  const userId = req.user.userId;
 
-    const user = await User.findById(userId);
+  const user = await User.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({
-        EC: 1,
-        message: "User not found",
-      });
-    }
-
-    return res.status(200).json({
-      EC: 0,
-      data: user,
-    });
-  } catch (error) {
-    console.log(error);
-
-    return res.status(500).json({
-      EC: -1,
-      message: "Internal server error",
+  if (!user) {
+    return res.status(404).json({
+      EC: 1,
+      message: "User not found",
     });
   }
+
+  return res.status(200).json({
+    EC: 0,
+    data: user,
+  });
 };
 
 module.exports = {

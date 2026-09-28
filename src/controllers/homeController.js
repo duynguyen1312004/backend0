@@ -1,11 +1,11 @@
-const connection = require("../config/database");
-const {
-  getAllUsers,
-  getUserById,
-  updateUserById,
-  createUser,
-  deleteUserById,
-} = require("../services/CRUDService");
+// const connection = require("../config/database");
+// const {
+//   getAllUsers,
+//   getUserById,
+//   updateUserById,
+//   createUser,
+//   deleteUserById,
+// } = require("../services/CRUDService");
 const User = require("../models/user");
 
 const Project = require("../models/project");
@@ -26,15 +26,11 @@ const getHomePage = async (req, res) => {
   });
 };
 
-const getABC = (req, res) => {
-  res.send("check ABC");
-};
-
 const postCreateUser = async (req, res) => {
   let email = req.body.email;
   let name = req.body.name;
   let city = req.body.city;
-  console.log("check req.body", email, name, city);
+  // console.log("check req.body", email, name, city);
 
   //thêm data động vào database
   await User.create({
@@ -63,10 +59,10 @@ const postUpdateUser = async (req, res) => {
   let city = req.body.city;
   let userId = req.body.userId;
 
-  console.log("check req.body", email, name, city, userId);
+  // console.log("check req.body", email, name, city, userId);
 
   //thêm data động vào database
-  // await updateUserById(email, city, name, userId);
+
   await User.updateOne(
     { _id: userId },
     {
@@ -75,7 +71,7 @@ const postUpdateUser = async (req, res) => {
       city: city,
     },
   );
-  // res.send("Updated user succeed");
+
   res.redirect("/"); //tro ve trang chu
 };
 
@@ -89,7 +85,7 @@ const getDeleteUserPage = async (req, res) => {
 const postRemoveUser = async (req, res) => {
   let userId = req.body.userId;
   let result = await User.deleteOne({ _id: userId });
-  console.log(">> result: ", result);
+
   res.redirect("/"); //tro ve trang chu
 };
 
@@ -162,7 +158,7 @@ const postCreateTaskPage = async (req, res) => {
       projectId: projectId,
     };
 
-    await postCreateTaskService(data);
+    await postCreateTaskService(data, req.user.userId);
 
     return res.redirect(`/projects/${projectId}`);
   } catch (error) {
@@ -173,7 +169,7 @@ const postCreateTaskPage = async (req, res) => {
 module.exports = {
   getUpdatePage,
   getHomePage,
-  getABC,
+
   postCreateUser,
   getCreatePage,
   postUpdateUser,

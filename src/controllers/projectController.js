@@ -73,8 +73,12 @@ const putUpdateProject = async (req, res) => {
     endDate,
     description,
   };
-  let result = await putUpdateProjectService(projectId, data, req.user.userId);
-  console.log("RESULT:", result);
+  const result = await putUpdateProjectService(
+    projectId,
+    data,
+    req.user.userId,
+  );
+
   if (result.EC !== 0) {
     return res.status(result.statusCode).json({
       EC: result.EC,
@@ -84,7 +88,7 @@ const putUpdateProject = async (req, res) => {
 
   return res.status(200).json({
     EC: 0,
-    data: result.data,
+    data: result,
   });
 };
 
