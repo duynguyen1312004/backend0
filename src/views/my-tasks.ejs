@@ -116,7 +116,7 @@
           </a>
 
 
-          <a href="#" class="nav-item">
+          <a href="/team" class="nav-item">
 
             <span class="nav-icon">
               ♧
@@ -163,7 +163,7 @@
 
 
         <!-- HELP -->
-        <div class="sidebar-help">
+        <div class="sidebar-help" onclick="window.location.href='/help'">
 
           <span class="help-icon">
             ?
@@ -185,11 +185,23 @@
 
 
         <!-- PROFILE -->
-        <div class="sidebar-profile">
+        <div class="sidebar-profile" onclick="window.location.href='/profile'">
 
-          <div class="profile-avatar">
-            <%= currentUser.name.charAt(0).toUpperCase() %>
-          </div>
+          <% if (currentUser.avatar) { %>
+
+            <img
+                src="<%= currentUser.avatar %>"
+                alt="Avatar"
+                class="profile-avatar"
+            >
+
+        <% } else { %>
+
+            <div class="profile-avatar">
+                <%= currentUser.name.charAt(0).toUpperCase() %>
+            </div>
+
+        <% } %>
 
 
           <div class="profile-info">
@@ -283,8 +295,22 @@
 
           <div class="header-user">
 
-            <div class="header-avatar">
-              <%= currentUser.name.charAt(0).toUpperCase() %>
+            <div class="header-avatar" onclick="window.location.href='/profile'">
+                <% if (currentUser.avatar) { %>
+
+                  <img
+                      src="<%= currentUser.avatar %>"
+                      alt="Avatar"
+                      class="profile-avatar"
+                  >
+
+              <% } else { %>
+
+                  <div class="profile-avatar">
+                      <%= currentUser.name.charAt(0).toUpperCase() %>
+                  </div>
+
+              <% } %>
             </div>
 
 
