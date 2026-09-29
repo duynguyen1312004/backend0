@@ -17,7 +17,6 @@ const postCreateUserAPI = async (req, res) => {
   let email = req.body.email;
   let name = req.body.name;
   let city = req.body.city;
-  console.log("check req.body", email, name, city);
 
   //thêm data động vào database
   let user = await User.create({
@@ -37,8 +36,6 @@ const putUpdateUserAPI = async (req, res) => {
   let name = req.body.name;
   let city = req.body.city;
   let userId = req.body.userId;
-
-  console.log("check req.body", email, name, city, userId);
 
   //thêm data động vào database
   // await updateUserById(email, city, name, userId);

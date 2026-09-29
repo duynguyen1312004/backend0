@@ -2,10 +2,8 @@ const Task = require("../models/task");
 const Project = require("../models/project");
 
 const postCreateTaskService = async (data, userId) => {
-  console.log("SERVICE projectId:", data.projectId);
   // Tìm project
   const project = await Project.findById(data.projectId);
-  console.log("FOUND PROJECT:", project);
 
   if (!project) {
     return {

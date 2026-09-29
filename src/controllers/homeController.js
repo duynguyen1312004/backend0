@@ -12,17 +12,55 @@ const {
   putUpdateTaskService,
 } = require("../services/taskService");
 
+const { getDashboardService } = require("../services/dashboardService");
+
 const getHomePage = async (req, res) => {
-  let users = await User.find({});
-  let projects = await Project.find({});
-  let tasks = await Task.find({});
-  let currentUser = await User.findById(req.user.userId);
-  return res.render("home.ejs", {
-    listUsers: users,
-    listProjects: projects,
-    listTasks: tasks,
-    currentUser: currentUser,
-  });
+  try {
+    const users = await User.find({});
+    const projects = await Project.find({});
+    const tasks = await Task.find({});
+
+    const currentUser = await User.findById(req.user.userId);
+
+    // Dashboard statistics
+    const totalUsers = users.length;
+
+    const totalProjects = projects.length;
+
+    const totalTasks = tasks.length;
+
+    const inProgressTasks = tasks.filter(
+      (task) => task.status === "IN_PROGRESS",
+    ).length;
+
+    const completedTasks = tasks.filter(
+      (task) => task.status === "DONE",
+    ).length;
+
+    let completedPercentage = 0;
+
+    if (totalTasks > 0) {
+      completedPercentage = Math.round((completedTasks / totalTasks) * 100);
+    }
+
+    return res.render("home.ejs", {
+      listUsers: users,
+      listProjects: projects,
+      listTasks: tasks,
+
+      currentUser: currentUser,
+
+      totalUsers: totalUsers,
+      totalProjects: totalProjects,
+      totalTasks: totalTasks,
+      inProgressTasks: inProgressTasks,
+      completedPercentage: completedPercentage,
+    });
+  } catch (error) {
+    console.log("error:", error);
+
+    return res.status(500).send("Server error");
+  }
 };
 
 const postAddMember = async (req, res) => {
@@ -226,11 +264,7 @@ const getCreateTaskPage = async (req, res) => {
 };
 const postCreateTaskPage = async (req, res) => {
   try {
-    console.log("PARAMS:", req.params);
-    console.log("BODY:", req.body);
-
     const projectId = req.params.id;
-    console.log("PROJECT ID:", projectId);
 
     const data = {
       name: req.body.name,
@@ -257,14 +291,11 @@ const postCreateTaskPage = async (req, res) => {
 
 const getMyTasksPage = async (req, res) => {
   try {
-    console.log("CURRENT USER:", req.user);
     const tasks = await Task.find({
       assignedTo: req.user.userId,
     })
       .populate("assignedTo", "name email")
       .populate("projectId", "name");
-
-    console.log("MY TASKS:", tasks);
 
     const currentUser = await User.findById(req.user.userId);
 

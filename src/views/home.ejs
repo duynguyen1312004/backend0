@@ -184,7 +184,7 @@
             </button>
 
 
-            <div class="header-user">
+            <div class="header-user" onclick="window.location.href='/profile'">
 
               <% if (currentUser.avatar) { %>
 
@@ -225,7 +225,7 @@
             </div>
 
             <div class="stat-number">
-              <%= listUsers.length %>
+              <strong><%= totalUsers %></strong>
             </div>
 
             <p class="stat-description">
@@ -243,7 +243,7 @@
             </div>
 
             <div class="stat-number">
-              <%= listProjects.length %>
+              <strong><%= totalProjects %></strong>
             </div>
 
             <p class="stat-description">
@@ -261,7 +261,7 @@
             </div>
 
             <div class="stat-number">
-              <%= listTasks.length %>
+              <strong><%= inProgressTasks %></strong>
             </div>
 
             <p class="stat-description">
@@ -279,7 +279,7 @@
             </div>
 
             <div class="stat-number">
-              86%
+              <strong><%= completedPercentage %>%</strong>
             </div>
 
             <p class="stat-description">
@@ -487,7 +487,7 @@
             </div>
 
 
-            <div class="profile-card-body">
+            <div class="profile-card-body" onclick="window.location.href='/profile'">
 
               <% if (currentUser.avatar) { %>
 
