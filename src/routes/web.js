@@ -13,6 +13,7 @@ const {
   postUpdateUser,
   getDeleteUserPage,
   postRemoveUser,
+  postRemoveAssignedUser,
 
   // Project
   getProjectPage,
@@ -24,6 +25,19 @@ const {
   // Task
   getCreateTaskPage,
   postCreateTaskPage,
+  getMyTasksPage,
+  getTaskDetailPage,
+  getEditTaskPage,
+  postEditTaskPage,
+  postDeleteTaskPage,
+  //PROFILE
+  getProfilePage,
+  getEditProfilePage,
+  postEditProfile,
+  //TEAM
+  getTeamPage,
+  //Need help
+  getHelpPage,
 } = require("../controllers/homeController");
 
 const {
@@ -98,5 +112,29 @@ router.post("/projects/:id/add-member", authMiddleware, postAddMember);
 router.get("/projects/:id/tasks/create", authMiddleware, getCreateTaskPage);
 
 router.post("/projects/:id/tasks/create", authMiddleware, postCreateTaskPage);
+router.get("/my-tasks", authMiddleware, getMyTasksPage);
+router.get("/tasks/:id", authMiddleware, getTaskDetailPage);
 
+router.get("/tasks/:id/edit", authMiddleware, getEditTaskPage);
+
+router.post("/tasks/:id/edit", authMiddleware, postEditTaskPage);
+
+router.post(
+  "/tasks/:id/remove-assigned-user",
+  authMiddleware,
+  postRemoveAssignedUser,
+);
+router.post("/tasks/:id/delete", authMiddleware, postDeleteTaskPage);
+
+// ==================== PROFILE ====================
+router.get("/profile", authMiddleware, getProfilePage);
+router.get("/profile/edit", authMiddleware, getEditProfilePage);
+router.post("/profile/edit", authMiddleware, postEditProfile);
+
+// ==================== team ====================
+
+router.get("/team", authMiddleware, getTeamPage);
+// ==================== need help ====================
+
+router.get("/help", authMiddleware, getHelpPage);
 module.exports = router;

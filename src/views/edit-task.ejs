@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Edit Task</title>
+
+    <link rel="stylesheet" href="/css/task-detail.css">
+</head>
+
+<body>
+
+    <div class="task-container">
+
+        <div class="page-header">
+
+            <a
+                href="/tasks/<%= task._id %>"
+                class="back-link"
+            >
+                ← Back to Task
+            </a>
+
+            <h1>Edit Task</h1>
+
+        </div>
+
+
+        <form
+            action="/tasks/<%= task._id %>/edit"
+            method="POST"
+            class="edit-form"
+        >
+
+            <!-- NAME -->
+
+            <div class="form-group">
+
+                <label>
+                    Task Name
+                </label>
+
+                <input
+                    type="text"
+                    name="name"
+                    value="<%= task.name %>"
+                    required
+                >
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    name="description"
+                    rows="5"
+                ><%= task.description || "" %></textarea>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="form-group">
+
+                <label>
+                    Status
+                </label>
+
+                <select
+                    name="status"
+                    required
+                >
+
+                    <option
+                        value="TODO"
+                        <%= task.status === "TODO" ? "selected" : "" %>
+                    >
+                        TODO
+                    </option>
+
+                    <option
+                        value="IN_PROGRESS"
+                        <%= task.status === "IN_PROGRESS" ? "selected" : "" %>
+                    >
+                        IN PROGRESS
+                    </option>
+
+                    <option
+                        value="DONE"
+                        <%= task.status === "DONE" ? "selected" : "" %>
+                    >
+                        DONE
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- END DATE -->
+
+            <div class="form-group">
+
+                <label>
+                    End Date
+                </label>
+
+                <input
+                    type="date"
+                    name="endDate"
+                    value="<%= task.endDate || "" %>"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ACTION -->
+
+            <div class="page-actions">
+
+                <a
+                    href="/tasks/<%= task._id %>"
+                    class="btn btn-secondary"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

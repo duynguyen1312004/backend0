@@ -1,0 +1,697 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>My Tasks - TaskFlow</title>
+
+  <link rel="stylesheet" href="/css/my-tasks.css" />
+</head>
+
+
+<body>
+
+  <div class="dashboard-layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+      <div class="sidebar-top">
+
+        <!-- LOGO -->
+        <a href="/" class="brand">
+
+          <div class="brand-icon">
+            ✓
+          </div>
+
+          <span>
+            TaskFlow
+          </span>
+
+        </a>
+
+
+        <!-- WORKSPACE -->
+        <div class="workspace-switcher">
+
+          <div class="workspace-avatar">
+            T
+          </div>
+
+          <div class="workspace-info">
+
+            <strong>
+              My Workspace
+            </strong>
+
+            <span>
+              Personal workspace
+            </span>
+
+          </div>
+
+          <span class="workspace-arrow">
+            ⌄
+          </span>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+        <nav class="sidebar-nav">
+
+          <p class="nav-label">
+            WORKSPACE
+          </p>
+
+
+          <a href="/" class="nav-item">
+
+            <span class="nav-icon">
+              ▦
+            </span>
+
+            <span>
+              Dashboard
+            </span>
+
+          </a>
+
+
+          <a href="/projects" class="nav-item">
+
+            <span class="nav-icon">
+              ▣
+            </span>
+
+            <span>
+              Projects
+            </span>
+
+          </a>
+
+
+          <a href="/my-tasks" class="nav-item active">
+
+            <span class="nav-icon">
+              ☑
+            </span>
+
+            <span>
+              My Tasks
+            </span>
+
+          </a>
+
+
+          <a href="#" class="nav-item">
+
+            <span class="nav-icon">
+              ♧
+            </span>
+
+            <span>
+              Team
+            </span>
+
+          </a>
+
+
+          <% if (currentUser && currentUser.role === "ADMIN") { %>
+
+            <p class="nav-label nav-label-spaced">
+              MANAGE
+            </p>
+
+
+            <a href="/create" class="nav-item">
+
+              <span class="nav-icon">
+                ＋
+              </span>
+
+              <span>
+                Create User
+              </span>
+
+            </a>
+
+          <% } %>
+
+        </nav>
+
+      </div>
+
+
+      <!-- =====================================================
+           SIDEBAR FOOTER
+      ====================================================== -->
+
+      <div class="sidebar-footer">
+
+
+        <!-- HELP -->
+        <div class="sidebar-help">
+
+          <span class="help-icon">
+            ?
+          </span>
+
+          <div>
+
+            <strong>
+              Need help?
+            </strong>
+
+            <span>
+              We're here for you.
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- PROFILE -->
+        <div class="sidebar-profile">
+
+          <div class="profile-avatar">
+            <%= currentUser.name.charAt(0).toUpperCase() %>
+          </div>
+
+
+          <div class="profile-info">
+
+            <h3>
+              <%= currentUser.name %>
+            </h3>
+
+            <p>
+              <%= currentUser.email %>
+            </p>
+
+          </div>
+
+
+          <span class="profile-more">
+            •••
+          </span>
+
+        </div>
+
+
+        <!-- LOGOUT -->
+        <form
+          action="/logout"
+          method="POST"
+          class="logout-form"
+          onsubmit="return confirm('Are you sure you want to log out?')"
+        >
+
+          <button
+            type="submit"
+            class="logout-button"
+          >
+
+            <span class="logout-icon">
+              ↪
+            </span>
+
+            <span>
+              Log out
+            </span>
+
+          </button>
+
+        </form>
+
+      </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+      <!-- HEADER -->
+      <header class="top-header">
+
+        <div class="header-title">
+
+          <p class="page-eyebrow">
+            WORKSPACE
+          </p>
+
+          <h1>
+            My Tasks
+          </h1>
+
+          <p>
+            Stay on top of the tasks assigned to you.
+          </p>
+
+        </div>
+
+
+        <div class="header-actions">
+
+
+          <a
+            href="/projects"
+            class="view-projects-button"
+          >
+            <span>▣</span>
+            View Projects
+          </a>
+
+
+          <div class="header-user">
+
+            <div class="header-avatar">
+              <%= currentUser.name.charAt(0).toUpperCase() %>
+            </div>
+
+
+            <div class="header-user-info">
+
+              <h3>
+                <%= currentUser.name %>
+              </h3>
+
+              <p>
+                <%= currentUser.email %>
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </header>
+
+
+      <!-- =====================================================
+           SUMMARY CARDS
+      ====================================================== -->
+
+      <section class="stats-grid">
+
+
+        <!-- TOTAL -->
+        <div class="stat-card">
+
+          <div class="stat-card-top">
+
+            <span class="stat-label">
+              TOTAL TASKS
+            </span>
+
+            <div class="stat-icon blue">
+              ☑
+            </div>
+
+          </div>
+
+
+          <div class="stat-number">
+            <%= tasks.length %>
+          </div>
+
+
+          <p class="stat-description">
+            Tasks assigned to you
+          </p>
+
+        </div>
+
+
+        <!-- TODO -->
+        <div class="stat-card">
+
+          <div class="stat-card-top">
+
+            <span class="stat-label">
+              TO DO
+            </span>
+
+            <div class="stat-icon gray">
+              ○
+            </div>
+
+          </div>
+
+
+          <div class="stat-number">
+            <%= tasks.filter(task => task.status === "TODO").length %>
+          </div>
+
+
+          <p class="stat-description">
+            Waiting to be started
+          </p>
+
+        </div>
+
+
+        <!-- IN PROGRESS -->
+        <div class="stat-card">
+
+          <div class="stat-card-top">
+
+            <span class="stat-label">
+              IN PROGRESS
+            </span>
+
+            <div class="stat-icon orange">
+              ◔
+            </div>
+
+          </div>
+
+
+          <div class="stat-number">
+            <%= tasks.filter(task => task.status === "IN_PROGRESS").length %>
+          </div>
+
+
+          <p class="stat-description">
+            Currently working on
+          </p>
+
+        </div>
+
+
+        <!-- DONE -->
+        <div class="stat-card">
+
+          <div class="stat-card-top">
+
+            <span class="stat-label">
+              COMPLETED
+            </span>
+
+            <div class="stat-icon green">
+              ✓
+            </div>
+
+          </div>
+
+
+          <div class="stat-number">
+            <%= tasks.filter(task => task.status === "DONE").length %>
+          </div>
+
+
+          <p class="stat-description">
+            Successfully completed
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           TASK SECTION
+      ====================================================== -->
+
+      <section class="tasks-card">
+
+
+        <!-- SECTION HEADER -->
+        <div class="tasks-card-header">
+
+          <div>
+
+            <p class="section-eyebrow">
+              TASK MANAGEMENT
+            </p>
+
+            <h2>
+              Your Tasks
+            </h2>
+
+            <p>
+              Review and track your assigned work.
+            </p>
+
+          </div>
+
+
+          <div class="task-count">
+
+            <strong>
+              <%= tasks.length %>
+            </strong>
+
+            <span>
+              <%= tasks.length === 1 ? "task" : "tasks" %>
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TASK TABLE
+        ================================================== -->
+
+        <% if (tasks.length > 0) { %>
+
+
+          <div class="table-container">
+
+            <table class="task-table">
+
+              <thead>
+
+                <tr>
+
+                  <th>
+                    TASK
+                  </th>
+
+                  <th>
+                    PROJECT
+                  </th>
+
+                  <th>
+                    STATUS
+                  </th>
+
+                  <th>
+                    START DATE
+                  </th>
+
+                  <th>
+                    END DATE
+                  </th>
+
+                </tr>
+
+              </thead>
+
+
+              <tbody>
+
+                <% tasks.forEach((task) => { %>
+
+
+                  <tr>
+
+
+                    <!-- TASK -->
+                    <td>
+
+                      <div class="task-cell">
+
+                        <div class="task-check">
+                          ✓
+                        </div>
+
+
+                        <div class="task-info">
+                          <strong>
+                            <a href="/tasks/<%= task._id %>" class="task-link">
+                                <%= task.name %>
+                            </a>
+                        </strong>
+
+
+                          <small>
+                            <%= task.description || "No description provided" %>
+                          </small>
+
+                        </div>
+
+                      </div>
+
+                    </td>
+
+
+                    <!-- PROJECT -->
+                    <td>
+
+                      <% if (task.projectId) { %>
+
+                        <span class="project-badge">
+                          <span class="project-dot"></span>
+
+                          <%= task.projectId.name %>
+                        </span>
+
+                      <% } else { %>
+
+                        <span class="no-project">
+                          No project
+                        </span>
+
+                      <% } %>
+
+                    </td>
+
+
+                    <!-- STATUS -->
+                    <td>
+
+                      <% 
+                        let statusClass = "status-default";
+                        let statusText = task.status;
+
+                        if (task.status === "TODO") {
+                          statusClass = "status-todo";
+                          statusText = "To Do";
+                        }
+
+                        if (task.status === "IN_PROGRESS") {
+                          statusClass = "status-progress";
+                          statusText = "In Progress";
+                        }
+
+                        if (task.status === "DONE") {
+                          statusClass = "status-done";
+                          statusText = "Done";
+                        }
+                      %>
+
+
+                      <span class="status-badge <%= statusClass %>">
+
+                        <span class="status-dot"></span>
+
+                        <%= statusText %>
+
+                      </span>
+
+                    </td>
+
+
+                    <!-- START DATE -->
+                    <td>
+
+                      <span class="date-text">
+
+                        <%= task.startDate || "N/A" %>
+
+                      </span>
+
+                    </td>
+
+
+                    <!-- END DATE -->
+                    <td>
+
+                      <span class="date-text">
+
+                        <%= task.endDate || "N/A" %>
+
+                      </span>
+
+                    </td>
+
+                  </tr>
+
+
+                <% }) %>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+
+        <% } else { %>
+
+
+          <!-- =================================================
+               EMPTY STATE
+          ================================================== -->
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+              ✓
+            </div>
+
+
+            <h3>
+              No tasks yet
+            </h3>
+
+
+            <p>
+              You don't have any tasks assigned to you at the moment.
+            </p>
+
+
+            <a
+              href="/projects"
+              class="view-projects-button"
+            >
+              <span>▣</span>
+              View Projects
+            </a>
+
+          </div>
+
+
+        <% } %>
+
+
+      </section>
+
+
+      <!-- FOOTER -->
+      <footer class="dashboard-footer">
+
+        © 2026 TaskFlow. Built for better productivity.
+
+      </footer>
+
+    </main>
+
+  </div>
+
+</body>
+
+</html>
+

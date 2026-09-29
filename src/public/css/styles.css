@@ -249,6 +249,7 @@ input {
 
   background: #20372b;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 .help-icon {
@@ -1176,4 +1177,37 @@ tbody tr:last-child td {
 
 .logout-button:active {
   transform: scale(0.98);
+}
+
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background: #e8f0fe;
+  color: #2563eb;
+}
+
+.btn-delete {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.view-only {
+  color: #94a3b8;
+  font-size: 13px;
 }

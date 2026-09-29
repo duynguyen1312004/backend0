@@ -35,10 +35,14 @@
             Projects
           </a>
 
-          <a href="/create" class="nav-item">
-            <span class="nav-icon">＋</span>
-            Create User
-          </a>
+          <% if (currentUser && currentUser.role === "ADMIN") { %>
+
+            <a href="/create" class="nav-item">
+                <span class="nav-icon">＋</span>
+                <span>Create User</span>
+            </a>
+
+        <% } %>
         </nav>
 
         <div class="sidebar-bottom">

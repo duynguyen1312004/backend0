@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Team - TaskFlow</title>
+
+    <link rel="stylesheet" href="/css/team.css">
+</head>
+
+<body>
+
+    <div class="team-container">
+
+        <div class="team-header">
+
+            <div>
+                <h1>My Team</h1>
+
+                <p>
+                    People working with you across your projects
+                </p>
+            </div>
+
+            <a href="/" class="btn btn-secondary">
+                ← Back
+            </a>
+
+        </div>
+
+
+        <% if (team.length === 0) { %>
+
+            <div class="empty-team">
+                <h2>No team members yet</h2>
+
+                <p>
+                    Join or create a project to start building your team.
+                </p>
+            </div>
+
+        <% } else { %>
+
+            <div class="team-grid">
+
+                <% team.forEach((user) => { %>
+
+                    <div class="team-card">
+
+                        <div class="user-avatar">
+                            <%= user.name.charAt(0).toUpperCase() %>
+                        </div>
+
+                        <div class="user-info">
+
+                            <h2>
+                                <%= user.name %>
+                            </h2>
+
+                            <p>
+                                <%= user.email %>
+                            </p>
+
+                            <span class="role">
+                                <%= user.role %>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+</body>
+
+</html>

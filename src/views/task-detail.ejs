@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Task Detail</title>
+
+    <link rel="stylesheet" href="/css/task-detail.css">
+</head>
+
+<body>
+
+    <div class="task-page">
+
+        <div class="task-container">
+
+            <!-- HEADER -->
+
+            <div class="page-header">
+
+                <div>
+                    <a href="/my-tasks" class="back-link">
+                        ← Back to My Tasks
+                    </a>
+
+                    <h1>
+                        <%= task.name %>
+                    </h1>
+
+                    <p>
+                        <%= task.description || "No description" %>
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- TASK INFORMATION -->
+
+            <div class="task-info-grid">
+
+                <div class="info-card">
+
+                    <span class="info-label">
+                        Project
+                    </span>
+
+                    <strong>
+                        <%= task.projectId
+                            ? task.projectId.name
+                            : "No project"
+                        %>
+                    </strong>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <span class="info-label">
+                        Assigned To
+                    </span>
+
+                    <strong>
+                        <%= task.assignedTo
+                            ? task.assignedTo.name
+                            : "Unassigned"
+                        %>
+                    </strong>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <span class="info-label">
+                        Start Date
+                    </span>
+
+                    <strong>
+                        <%= task.startDate || "N/A" %>
+                    </strong>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <span class="info-label">
+                        End Date
+                    </span>
+
+                    <strong>
+                        <%= task.endDate || "N/A" %>
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="task-section">
+
+                <h2>Status</h2>
+
+                <%
+                    let statusClass = "status-default";
+
+                    if (task.status === "TODO") {
+                        statusClass = "status-pending";
+                    }
+
+                    if (task.status === "IN_PROGRESS") {
+                        statusClass = "status-progress";
+                    }
+
+                    if (task.status === "DONE") {
+                        statusClass = "status-completed";
+                    }
+                %>
+
+                <span class="status-badge <%= statusClass %>">
+                    <%= task.status %>
+                </span>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="task-section">
+
+                <h2>Description</h2>
+
+                <p>
+                    <%= task.description || "No description available." %>
+                </p>
+
+            </div>
+
+
+            <!-- ACTION -->
+            <div class="page-actions">
+
+                <a href="/my-tasks" class="btn btn-secondary">
+                    ← Back
+                </a>
+
+                <div class="task-actions">
+
+                    <a
+                        href="/tasks/<%= task._id %>/edit"
+                        class="btn btn-primary"
+                    >
+                        Edit Task
+                    </a>
+
+                    <% 
+                        const isAssignedUser =
+                            task.assignedTo &&
+                            task.assignedTo._id.toString() === currentUser._id.toString();
+
+                        const isProjectCreator =
+                            task.projectId &&
+                            task.projectId.createdBy.toString() === currentUser._id.toString();
+                    %>
+
+                    <% if (isProjectCreator) { %>
+
+                        <form
+                            action="/tasks/<%= task._id %>/remove-assigned-user"
+                            method="POST"
+                        >
+                            <button
+                                type="submit"
+                                class="btn btn-warning"
+                            >
+                                Remove Assigned User
+                            </button>
+                        </form>
+
+                        <form
+                            action="/tasks/<%= task._id %>/delete"
+                            method="POST"
+                            onsubmit="return confirm('Are you sure you want to delete this task?');"
+                        >
+                            <button
+                                type="submit"
+                                class="btn btn-danger"
+                            >
+                                Delete Task
+                            </button>
+                        </form>
+
+                    <% } %>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
