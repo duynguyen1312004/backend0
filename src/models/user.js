@@ -11,6 +11,10 @@ const userSchema = mongoose.Schema({
   },
 
   city: String,
+  avatar: {
+    type: String,
+    default: "",
+  },
 
   role: {
     type: String,

@@ -457,8 +457,26 @@ const postEditProfile = async (req, res) => {
       return res.status(404).send("User not found");
     }
 
+    // Update thông tin cơ bản
     user.name = name.trim();
     user.city = city ? city.trim() : "";
+
+    // Upload avatar
+    if (req.files && req.files.avatar) {
+      const avatar = req.files.avatar;
+
+      if (!avatar.mimetype.startsWith("image/")) {
+        return res.status(400).send("Avatar must be an image");
+      }
+
+      const fileName = `${Date.now()}-${avatar.name}`;
+
+      const uploadPath = `src/public/images/upload/${fileName}`;
+
+      await avatar.mv(uploadPath);
+
+      user.avatar = `/images/upload/${fileName}`;
+    }
 
     await user.save();
 

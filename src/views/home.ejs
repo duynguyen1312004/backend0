@@ -102,20 +102,31 @@
 
           
 
-
           <!-- PROFILE -->
-          <div class="sidebar-profile">
+          <div class="sidebar-profile" onclick="window.location.href='/profile'">
 
-            <div class="profile-avatar">
-              <%= currentUser.name.charAt(0).toUpperCase() %>
-            </div>
+              <% if (currentUser.avatar) { %>
 
-            <div class="profile-info">
-              <h3><%= currentUser.name %></h3>
-              <p><%= currentUser.email %></p>
-            </div>
+                <img
+                    src="<%= currentUser.avatar %>"
+                    alt="Avatar"
+                    class="profile-avatar"
+                >
 
-            <span class="profile-more">•••</span>
+            <% } else { %>
+
+                <div class="profile-avatar">
+                    <%= currentUser.name.charAt(0).toUpperCase() %>
+                </div>
+
+            <% } %>
+
+              <div class="profile-info">
+                  <h3><%= currentUser.name %></h3>
+                  <p><%= currentUser.email %></p>
+              </div>
+
+              <span class="profile-more">•••</span>
 
           </div>
 
@@ -175,9 +186,21 @@
 
             <div class="header-user">
 
-              <div class="header-avatar">
-                <%= currentUser.name.charAt(0).toUpperCase() %>
-              </div>
+              <% if (currentUser.avatar) { %>
+
+                <img
+                    src="<%= currentUser.avatar %>"
+                    alt="Avatar"
+                    class="header-avatar"
+                >
+
+            <% } else { %>
+
+                <div class="header-avatar">
+                    <%= currentUser.name.charAt(0).toUpperCase() %>
+                </div>
+
+            <% } %>
 
               <div>
                 <h3><%= currentUser.name %></h3>
@@ -466,9 +489,21 @@
 
             <div class="profile-card-body">
 
-              <div class="large-avatar">
-                <%= currentUser.name.charAt(0).toUpperCase() %>
-              </div>
+              <% if (currentUser.avatar) { %>
+
+                <img
+                    src="<%= currentUser.avatar %>"
+                    alt="Avatar"
+                    class="large-avatar"
+                >
+
+            <% } else { %>
+
+                <div class="large-avatar">
+                    <%= currentUser.name.charAt(0).toUpperCase() %>
+                </div>
+
+            <% } %>
 
               <h3>
                 <%= currentUser.name %>
@@ -488,6 +523,13 @@
                   <%= currentUser.email %>
                 </strong>
               </div>
+              
+              <div class="profile-detail">
+                <span>Role</span>
+                <strong>
+                    <%= currentUser.role %>
+                </strong>
+            </div>
 
 
               <div class="profile-detail">
