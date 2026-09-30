@@ -183,39 +183,39 @@ A dedicated Help page provides guidance for:
 
 ### 🔐 Login
 
-![TaskFlow Login](screenshots/login.png)
+![TaskFlow Login](screenshots/login.jpg)
 
 ### 📝 Register
 
-![TaskFlow Register](screenshots/register.png)
+![TaskFlow Register](screenshots/register.jpg)
 
 ### 📊 Dashboard
 
-![TaskFlow Dashboard](screenshots/dashboard.png)
+![TaskFlow Dashboard](screenshots/dashboard.jpg)
 
 ### 📁 Projects
 
-![TaskFlow Projects](screenshots/projects.png)
+![TaskFlow Projects](screenshots/projects.jpg)
 
 ### 📋 Project Detail
 
-![TaskFlow Project Detail](screenshots/project-detail.png)
+![TaskFlow Project Detail](screenshots/project-detail.jpg)
 
 ### ✅ My Tasks
 
-![TaskFlow My Tasks](screenshots/my-tasks.png)
+![TaskFlow My Tasks](screenshots/my-tasks.jpg)
 
 ### 🤝 Team
 
-![TaskFlow Team](screenshots/team.png)
+![TaskFlow Team](screenshots/team.jpg)
 
 ### 👤 Profile
 
-![TaskFlow Profile](screenshots/profile.png)
+![TaskFlow Profile](screenshots/profile.jpg)
 
 ### ❓ Help Center
 
-![TaskFlow Help](screenshots/help.png)
+![TaskFlow Help](screenshots/help.jpg)
 
 ---
 
