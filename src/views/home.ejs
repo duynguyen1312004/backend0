@@ -309,10 +309,12 @@
                 </p>
               </div>
 
-              <a href="/create" class="primary-button">
-                <span>＋</span>
-                Create User
-              </a>
+              <% if (currentUser.role === "ADMIN") { %>
+                <a href="/create" class="primary-button">
+                  <span>＋</span>
+                  Create User
+                </a>
+              <% } %>
 
             </div>
 
