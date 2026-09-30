@@ -37,43 +37,63 @@ const postLogout = (req, res) => {
 };
 
 const postRegister = async (req, res) => {
-  const schema = Joi.object({
-    name: Joi.string().alphanum().min(3).max(30).required(),
+  try {
+    const schema = Joi.object({
+      name: Joi.string().min(3).max(30).required(),
 
-    email: Joi.string().email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
-    }),
-    password: Joi.string().min(3).max(30).required(),
+      email: Joi.string()
+        .email({
+          minDomainSegments: 2,
+          tlds: { allow: ["com", "net"] },
+        })
+        .required(),
 
-    confirmPassword: Joi.string()
-      .min(3)
-      .max(30)
-      .required()
-      .valid(Joi.ref("password")), //phải giống với password
+      password: Joi.string().min(3).max(30).required(),
 
-    city: Joi.string().min(2).max(50).required(),
+      confirmPassword: Joi.string()
+        .min(3)
+        .max(30)
+        .required()
+        .valid(Joi.ref("password")),
 
-    terms: Joi.string().valid("on").required(),
-  });
-  const { error } = schema.validate(req.body, { abortEarly: false });
-  if (error) {
-    return res.status(400).json({
-      message: "Validation failed",
-      errors: error.details,
+      city: Joi.string().min(2).max(50).required(),
+
+      terms: Joi.string().valid("on").required(),
     });
-  }
-  const { name, email, password, city } = req.body;
-  const data = {
-    name,
-    email,
-    password,
-    city,
-  };
-  let result = await postRegisterService(data);
-  res.status(200).json(result);
-};
 
+    const { error } = schema.validate(req.body, {
+      abortEarly: false,
+    });
+
+    if (error) {
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: error.details,
+      });
+    }
+
+    const { name, email, password, city } = req.body;
+
+    const data = {
+      name,
+      email,
+      password,
+      city,
+    };
+
+    const result = await postRegisterService(data);
+
+    if (result.EC !== 0) {
+      return res.status(400).send(result.message);
+    }
+
+    return res.redirect("/login");
+  } catch (error) {
+    console.log("Register error:", error);
+
+    return res.status(500).send("Server error");
+  }
+};
 const getProfile = async (req, res) => {
   const userId = req.user.userId;
 

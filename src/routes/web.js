@@ -45,6 +45,7 @@ const {
   getLoginPage,
   getRegisterPage,
   postLogout,
+  postRegister,
 } = require("../controllers/authController");
 
 const { postCreateTask } = require("../controllers/taskController");
@@ -97,6 +98,7 @@ router.get("/login", getLoginPage);
 router.post("/login", postLogin);
 router.get("/register", getRegisterPage);
 router.post("/logout", postLogout);
+router.post("/register", postRegister);
 
 // ==================== PROJECT ====================
 router.get("/projects/create", authMiddleware, getCreateProjectPage);
