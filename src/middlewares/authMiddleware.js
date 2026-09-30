@@ -18,6 +18,12 @@ const authMiddleware = (req, res, next) => {
 
     // 3. Không có token
     if (!token) {
+      // Nếu là request từ trình duyệt → chuyển về trang login
+      if (req.accepts("html")) {
+        return res.redirect("/login");
+      }
+
+      // Nếu là API → trả JSON
       return res.status(401).json({
         EC: -1,
         message: "Token is missing",
@@ -32,6 +38,11 @@ const authMiddleware = (req, res, next) => {
 
     next();
   } catch (error) {
+    // Token sai hoặc hết hạn
+    if (req.accepts("html")) {
+      return res.redirect("/login");
+    }
+
     return res.status(401).json({
       EC: -1,
       message: "Invalid or expired token",
