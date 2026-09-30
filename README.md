@@ -179,6 +179,46 @@ A dedicated Help page provides guidance for:
 
 ---
 
+# 📸 Screenshots
+
+### 🔐 Login
+
+![TaskFlow Login](screenshots/login.png)
+
+### 📝 Register
+
+![TaskFlow Register](screenshots/register.png)
+
+### 📊 Dashboard
+
+![TaskFlow Dashboard](screenshots/dashboard.png)
+
+### 📁 Projects
+
+![TaskFlow Projects](screenshots/projects.png)
+
+### 📋 Project Detail
+
+![TaskFlow Project Detail](screenshots/project-detail.png)
+
+### ✅ My Tasks
+
+![TaskFlow My Tasks](screenshots/my-tasks.png)
+
+### 🤝 Team
+
+![TaskFlow Team](screenshots/team.png)
+
+### 👤 Profile
+
+![TaskFlow Profile](screenshots/profile.png)
+
+### ❓ Help Center
+
+![TaskFlow Help](screenshots/help.png)
+
+---
+
 # 🔐 Authentication Architecture
 
 TaskFlow uses **JWT authentication** with an HTTP-only cookie for the web application.
